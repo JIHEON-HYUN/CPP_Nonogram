@@ -35,6 +35,8 @@ public:
 
 	vector<vector<int>> GetRowList();
 	vector<vector<int>> GetColList();
+	void SetRowList(vector<vector<int>> newRowList);
+	void SetColList(vector<vector<int>> newColList);
 
 	int GetRowCount();
 	int GetColCount();

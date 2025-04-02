@@ -84,4 +84,7 @@ void PlayScene::Init()
 			playerDrawing->SetValue(i, j, 0);
 		}
 	}
+
+	playerDrawing->SetCurX(0);
+	playerDrawing->SetCurY(0);
 }

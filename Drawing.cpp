@@ -68,12 +68,12 @@ Drawing::Drawing(int width, int height)
 	curX = 0;
 	curY = 0;
 
-	drawing.resize(width, vector<int>(height));
+	drawing.resize(height, vector<int>(width));
 
 	// drawingÀÇ ¸ðµç ¿ä¼Ò¿¡ 0(ºó Ä­) or 1(ÃÊ·Ï»ö) °ª ·£´ý »ðÀÔ
-	for (int i = 0; i < width; i++)
+	for (int i = 0; i < height; i++)
 	{
-		for (int j = 0; j < height; j++)
+		for (int j = 0; j < width; j++)
 		{
 			drawing[i][j] = rand() % 2;
 		}
@@ -157,6 +157,16 @@ vector<vector<int>> Drawing::GetRowList()
 vector<vector<int>> Drawing::GetColList()
 {
 	return colList;
+}
+
+void Drawing::SetRowList(vector<vector<int>> newRowList)
+{
+	rowList = newRowList;
+}
+
+void Drawing::SetColList(vector<vector<int>> newColList)
+{
+	colList = newColList;
 }
 
 int Drawing::GetRowCount()
