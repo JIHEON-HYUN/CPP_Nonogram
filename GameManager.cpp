@@ -153,7 +153,6 @@ void GameManager::GameStart(int index)
 		// PlayerDraw()에서 뒤로가기를 눌렀는지 확인하는 변수
 		bool checkContinue = false;
 		
-
 		if (CheckGameOver(index))
 		{
 			checkContinue = playScene[index]->PlayerDraw();
