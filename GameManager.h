@@ -18,13 +18,18 @@ private:
 public:
 	GameManager();
 	~GameManager();
+
 	void ShowMenu();
 	void ShowGameMenu();
 	void ShowEditMenu();
-	void GameStart(int index); // index번째 playScene의 게임시작
-	void AddDrawing();
-	void AddRandomDrawing(int width, int height);
-	void RemoveDrawing();
+
+	// GameMenu
+	void GameStart(int index);
 	bool CheckGameOver(int index);
+
+	// EditMenu
+	void AddDrawing();
+	void AddRandomDrawing();
+	void RemoveDrawing();
 };
 

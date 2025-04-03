@@ -1,4 +1,4 @@
-#include "GameManager.h"
+ï»¿#include "GameManager.h"
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
@@ -6,6 +6,7 @@
 
 GameManager::GameManager()
 {
+	// GameManager ìƒì„±ë  ë•Œ, ì‚¬ì „ì— ê·¸ë¦¼ ëª©ë¡ ì €ì¥
 	vector<vector<int>> exam1 =
 	{
 		{0,0,0,0,1,0,0,0,0,0},
@@ -79,34 +80,97 @@ GameManager::GameManager()
 		{1,1,0}
 	};
 
-	drawingList.push_back(new Drawing(exam1));
-	playScene.push_back(new PlayScene(drawingList[0]));
-	drawingList.push_back(new Drawing(exam2));
-	playScene.push_back(new PlayScene(drawingList[1]));
-	drawingList.push_back(new Drawing(exam3));
-	playScene.push_back(new PlayScene(drawingList[2]));
-	drawingList.push_back(new Drawing(exam4));
-	playScene.push_back(new PlayScene(drawingList[3]));
-	drawingList.push_back(new Drawing(exam5));
-	playScene.push_back(new PlayScene(drawingList[4]));
 	drawingList.push_back(new Drawing(exam6));
+	playScene.push_back(new PlayScene(drawingList[0]));
+	drawingList.push_back(new Drawing(exam5));
+	playScene.push_back(new PlayScene(drawingList[1]));
+	drawingList.push_back(new Drawing(exam4));
+	playScene.push_back(new PlayScene(drawingList[2]));
+	drawingList.push_back(new Drawing(exam1));
+	playScene.push_back(new PlayScene(drawingList[3]));
+	drawingList.push_back(new Drawing(exam3));
+	playScene.push_back(new PlayScene(drawingList[4]));
+	drawingList.push_back(new Drawing(exam2));
 	playScene.push_back(new PlayScene(drawingList[5]));
-	drawingList.push_back(new Drawing(3, 10));
-	playScene.push_back(new PlayScene(drawingList[6]));
 }
 
 GameManager::~GameManager()
 {
 	for (int i = 0; i < drawingList.size(); i++)
 		delete drawingList[i];
+	drawingList.clear();
 
 	for (int i = 0; i < playScene.size(); i++)
 		delete playScene[i];
+	playScene.clear();
 }	
 
 void GameManager::ShowMenu()
 {
-	AddDrawing(3, 4);
+	char input;
+	int index = 0;
+
+	while (1)
+	{
+		system("cls");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10); // íƒ€ì´í‹€ ì´ˆë¡ìƒ‰ ì¶œë ¥
+		cout << "â–       â–     â– â– â–     â–       â–     â– â– â–       â– â– â–     â– â– â–       â– â–     â–       â– \n";
+		cout << "â– â–     â–   â–       â–   â– â–     â–   â–       â–   â–       â–   â–     â–   â–     â–   â– â–   â– â– \n";
+		cout << "â– â– â–   â–   â–       â–   â– â– â–   â–   â–       â–   â–           â–     â–   â–     â–   â– â– â– â– â– \n";
+		cout << "â–   â– â– â–   â–       â–   â–   â– â– â–   â–       â–   â–   â– â– â–   â– â– â–     â– â– â– â–   â–   â–   â– \n";
+		cout << "â–     â– â–   â–       â–   â–     â– â–   â–       â–   â–       â–   â–     â–   â–     â–   â–       â– \n";
+		cout << "â–       â–   â–       â–   â–       â–   â–       â–   â–       â–   â–     â–   â–     â–   â–       â– \n";
+		cout << "â–       â–     â– â– â–     â–       â–     â– â– â–       â– â– â–     â–     â–   â–     â–   â–       â– \n\n\n";
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7); // ì¶œë ¥ í›„ ë‹¤ì‹œ í°ìƒ‰ìœ¼ë¡œ ìƒ‰ ë³€ê²½
+
+		if (index == 0)
+		{
+			// í˜„ì¬ ë©”ë‰´ ìœ„ì¹˜ ë…¸ë€ìƒ‰ìœ¼ë¡œ ê°•ì¡°
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); 
+			cout << "1. ë…¸ë…¸ê·¸ë¨ ì‹œì‘\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+			cout << "2. ë…¸ë…¸ê·¸ë¨ í¸ì§‘\n\n";
+		}
+		else
+		{
+			cout << "1. ë…¸ë…¸ê·¸ë¨ ì‹œì‘\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+			cout << "2. ë…¸ë…¸ê·¸ë¨ í¸ì§‘\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+		}
+		cout << "ì´ë™ : í™”ì‚´í‘œ\n";
+		cout << "ì„ íƒ : z\n";
+		cout << "ì¢…ë£Œ : esc\n";
+
+		// ë©”ë‰´ ì¶œë ¥ í›„ í‚¤ ì…ë ¥
+		input = _getch();
+		if (input == 224) // ë°©í–¥í‚¤ì¼ ê²½ìš°
+			input = _getch();
+
+		switch (input)
+		{
+		case 72: // ìœ„ ë°©í–¥í‚¤
+			if (index > 0)
+				index--;
+			break;
+		case 80: // ì•„ë˜ ë°©í–¥í‚¤
+			if (index < 1)
+				index++;
+			break;
+		case 'z': // ë©”ë‰´ ì„ íƒ
+			system("cls");
+			if (index == 0)
+				ShowGameMenu();
+			else
+				ShowEditMenu();
+			break;
+		case 27: // Escí‚¤ ì¢…ë£Œ
+			return;
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void GameManager::ShowGameMenu()
@@ -119,29 +183,29 @@ void GameManager::ShowGameMenu()
 		system("cls");
 
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());
-		cout << "±×¸²ÀÌµ¿ : ÁÂ/¿ì È­»ìÇ¥\n";
-		cout << "¼±ÅÃ : z\n";
-		cout << "µÚ·Î°¡±â : Esc\n";
+		cout << "ê·¸ë¦¼ì´ë™ : ì¢Œ/ìš° í™”ì‚´í‘œ\n";
+		cout << "ì„ íƒ : z\n";
+		cout << "ë’¤ë¡œê°€ê¸° : Esc\n";
 
 		input = _getch();
-		if (input == 224) // ¹æÇâÅ°ÀÏ °æ¿ì
+		if (input == 224) // ë°©í–¥í‚¤ì¼ ê²½ìš°
 			input = _getch();
 
 		switch (input)
 		{
-		case 75: // ¿ŞÂÊ ¹æÇâÅ°
+		case 75: // ì™¼ìª½ ë°©í–¥í‚¤
 			if (index > 0)
 				index--;
 			break;
-		case 77: // ¿À¸¥ÂÊ ¹æÇâÅ°
+		case 77: // ì˜¤ë¥¸ìª½ ë°©í–¥í‚¤
 			if (index < playScene.size() - 1)
 				index++;
 			break;
-		case 'z': // ±×¸² ¼±ÅÃ
+		case 'z': // ê·¸ë¦¼ ì„ íƒ
 			system("cls");
-			GameStart(index); // ¼±ÅÃÇÑ ±×¸²À¸·Î °ÔÀÓ ½ÃÀÛ
+			GameStart(index); // ì„ íƒí•œ ê·¸ë¦¼ìœ¼ë¡œ ê²Œì„ ì‹œì‘
 			break;
-		case 27: // EscÅ° µÚ·Î°¡±â
+		case 27: // Escí‚¤ ë’¤ë¡œê°€ê¸°
 			return;
 			break;
 		default:
@@ -158,35 +222,59 @@ void GameManager::ShowEditMenu()
 	while (1)
 	{
 		system("cls");
-		cout << "1. »ç¿ëÀÚ ±×¸² Ãß°¡\n\n";
-		cout << "2. ·£´ı ±×¸² Ãß°¡\n\n";
-		cout << "3. ±×¸² »èÁ¦\n\n";
-		cout << "ÀÌµ¿ : È­»ìÇ¥\n";
-		cout << "¼±ÅÃ : z\n";
-		cout << "µÚ·Î°¡±â : esc\n";
+		if (index == 0)
+		{
+			// í˜„ì¬ ë©”ë‰´ ìœ„ì¹˜ ë…¸ë€ìƒ‰ìœ¼ë¡œ ê°•ì¡°
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+			cout << "1. ì‚¬ìš©ì ê·¸ë¦¼ ì¶”ê°€\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+			cout << "2. ëœë¤ ê·¸ë¦¼ ì¶”ê°€\n\n";
+			cout << "3. ê·¸ë¦¼ ì‚­ì œ\n\n";
+		}
+		else if (index == 1)
+		{
+			cout << "1. ì‚¬ìš©ì ê·¸ë¦¼ ì¶”ê°€\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+			cout << "2. ëœë¤ ê·¸ë¦¼ ì¶”ê°€\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+			cout << "3. ê·¸ë¦¼ ì‚­ì œ\n\n";
+		}
+		else
+		{
+			cout << "1. ì‚¬ìš©ì ê·¸ë¦¼ ì¶”ê°€\n\n";
+			cout << "2. ëœë¤ ê·¸ë¦¼ ì¶”ê°€\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+			cout << "3. ê·¸ë¦¼ ì‚­ì œ\n\n";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+		}
+		cout << "ì´ë™ : í™”ì‚´í‘œ\n";
+		cout << "ì„ íƒ : z\n";
+		cout << "ë’¤ë¡œê°€ê¸° : esc\n";
 
 		input = _getch();
-		if (input == 224) // ¹æÇâÅ°ÀÏ °æ¿ì
+		if (input == 224) // ë°©í–¥í‚¤ì¼ ê²½ìš°
 			input = _getch();
 
 		switch (input)
 		{
-		case 72: // À§ ¹æÇâÅ°
+		case 72: // ìœ„ ë°©í–¥í‚¤
 			if (index > 0)
 				index--;
 			break;
-		case 80: // ¾Æ·¡ ¹æÇâÅ°
+		case 80: // ì•„ë˜ ë°©í–¥í‚¤
 			if (index < 2)
 				index++;
 			break;
-		case 'z': // ¸Ş´º ¼±ÅÃ
+		case 'z': // ë©”ë‰´ ì„ íƒ
 			system("cls");
-			switch (index)
-			{
-				
-			}
+			if (index == 0)
+				AddDrawing();
+			else if (index == 1)
+				AddRandomDrawing();
+			else
+				RemoveDrawing();
 			break;
-		case 27: // EscÅ° µÚ·Î°¡±â
+		case 27: // Escí‚¤ ë’¤ë¡œê°€ê¸°
 			return;
 			break;
 		default:
@@ -197,31 +285,108 @@ void GameManager::ShowEditMenu()
 
 void GameManager::GameStart(int index)
 {
-	// PlayerDraw()¿¡¼­ µÚ·Î°¡±â¸¦ ´­·¶´ÂÁö È®ÀÎÇÏ´Â º¯¼ö
+	// PlayerDraw()ì—ì„œ ë’¤ë¡œê°€ê¸°ë¥¼ ëˆŒë €ëŠ”ì§€ í™•ì¸í•˜ëŠ” ë³€ìˆ˜
 	bool checkContinue = false;
 
-	// ÇÃ·¹ÀÌ¾î°¡ ±×¸° ±×¸²ÀÌ Á¤´äÀÏ ¶§±îÁö ¹İº¹
+	// í”Œë ˆì´ì–´ê°€ ê·¸ë¦° ê·¸ë¦¼ì´ ì •ë‹µì¼ ë•Œê¹Œì§€ ë°˜ë³µ
 	while (!CheckGameOver(index))
 	{
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());
 		checkContinue = playScene[index]->PlayerDraw();
 
 		if (!checkContinue)
-			break; // PlayerDraw()¿¡¼­ µÚ·Î°¡±â¸¦ ´©¸£¸é Áï½Ã ¹İº¹ Å»Ãâ
+			break; // PlayerDraw()ì—ì„œ ë’¤ë¡œê°€ê¸°ë¥¼ ëˆ„ë¥´ë©´ ì¦‰ì‹œ ë°˜ë³µ íƒˆì¶œ
 	}
 
-	// ±×¸²ÀÌ ¿Ï¼ºµÇ¸é ÇöÀç Ä¿¼­À§Ä¡¸¦ ±×¸² °İÀÚ ¹ÛÀ¸·Î »©¼­ ¿Ï¼ºº»À» Ãâ·Â
-	// PlayerDraw()¿¡¼­ µÚ·Î°¡±â¸¦ ´©¸£¸é false°¡ ¹İÈ¯µÇ¾î Á¶°Ç¹® ¾È ÄÚµå´Â ½ÇÇà X 
+	// ê·¸ë¦¼ì´ ì™„ì„±ë˜ë©´ í˜„ì¬ ì»¤ì„œìœ„ì¹˜ë¥¼ ê·¸ë¦¼ ê²©ì ë°–ìœ¼ë¡œ ë¹¼ì„œ ì™„ì„±ë³¸ì„ ì¶œë ¥
+	// PlayerDraw()ì—ì„œ ë’¤ë¡œê°€ê¸°ë¥¼ ëˆ„ë¥´ë©´ falseê°€ ë°˜í™˜ë˜ì–´ ì¡°ê±´ë¬¸ ì•ˆ ì½”ë“œëŠ” ì‹¤í–‰ X 
 	if (checkContinue)
 	{
 		system("cls");
 		playScene[index]->GetPlayerDrawing()->SetCurX(playScene[index]->GetPlayerDrawing()->GetColCount());
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());
-		cout << "±×¸²ÀÌ ¿Ï¼ºµÇ¾ú½À´Ï´Ù. ÃàÇÏÇÕ´Ï´Ù!\n";
+		cout << "ê·¸ë¦¼ì´ ì™„ì„±ë˜ì—ˆìŠµë‹ˆë‹¤. ì¶•í•˜í•©ë‹ˆë‹¤!\n";
 		Sleep(2000);
 
-		// ¿Ï¼º ¸Ş¼¼Áö ÀÌÈÄ ÇØ´ç ±×¸² ÃÊ±âÈ­
+		// ì™„ì„± ë©”ì„¸ì§€ ì´í›„ í•´ë‹¹ ê·¸ë¦¼ ì´ˆê¸°í™”
 		playScene[index]->Init();
+	}
+}
+
+bool GameManager::CheckGameOver(int index)
+{
+	// ì´ ì¹ í•´ì§„ ì¹¸ ìˆ˜ê°€ ë‹¤ë¥´ë©´ ê²€ì‚¬ ëŒë¦¬ì§€ì•Šê³  ë°”ë¡œ false ë°˜í™˜
+	if (playScene[index]->GetPlayerDrawing()->GetValueSum() != drawingList[index]->GetValueSum())
+	{
+		return false;
+	}
+	else
+	{
+		auto player = playScene[index]->GetPlayerDrawing();
+
+		// row ê²€ì‚¬
+		for (int i = 0; i < player->GetRowCount(); i++)
+		{
+			vector<int> anwerRow = player->GetRowList()[i];
+			vector<int> playerRow;
+			int count = 0;
+
+			for (int j = 0; j < player->GetColCount(); j++)
+			{
+				if (player->GetValue(i, j) == 1)
+					count++;
+				else
+				{
+					if (count != 0)
+					{
+						playerRow.push_back(count);
+						count = 0;
+					}
+				}
+			}
+
+			if (count != 0)
+				playerRow.push_back(count);
+
+			if (playerRow.empty())
+				playerRow.push_back(0);
+
+			if (playerRow != anwerRow)
+				return false;
+		}
+
+		// col ê²€ì‚¬
+		for (int i = 0; i < player->GetColCount(); i++)
+		{
+			vector<int> answerCol = player->GetColList()[i];
+			vector<int> playerCol;
+			int count = 0;
+
+			for (int j = 0; j < player->GetRowCount(); j++)
+			{
+				if (player->GetValue(j, i) == 1)
+					count++;
+				else
+				{
+					if (count != 0)
+					{
+						playerCol.push_back(count);
+						count = 0;
+					}
+				}
+			}
+
+			if (count != 0)
+				playerCol.push_back(count);
+
+			if (playerCol.empty())
+				playerCol.push_back(0);
+
+			if (playerCol != answerCol)
+				return false;
+		}
+
+		return true;
 	}
 }
 
@@ -232,11 +397,11 @@ void GameManager::AddDrawing()
 
 	while (1)
 	{
-		cout << "°¡·Î ±æÀÌ¸¦ ÀÔ·ÂÇÏ¼¼¿ä (1 ~ 30) : ";;
+		cout << "ê°€ë¡œ ê¸¸ì´ë¥¼ ì…ë ¥í•˜ì„¸ìš” (1 ~ 30) : ";;
 		cin >> width;
 		if (width < 1 || width > 30)
 		{
-			cout << "Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä \n\n";
+			cout << "ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš” \n\n";
 			continue;
 		}
 		else
@@ -245,11 +410,11 @@ void GameManager::AddDrawing()
 
 	while (1)
 	{
-		cout << "¼¼·Î ±æÀÌ¸¦ ÀÔ·ÂÇÏ¼¼¿ä (1 ~ 30) : ";;
+		cout << "ì„¸ë¡œ ê¸¸ì´ë¥¼ ì…ë ¥í•˜ì„¸ìš” (1 ~ 30) : ";;
 		cin >> height;
 		if (height < 1 || height > 30)
 		{
-			cout << "Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä \n\n";
+			cout << "ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš” \n\n";
 			continue;
 		}
 		else
@@ -268,42 +433,42 @@ void GameManager::AddDrawing()
 		system("cls");
 		boardViewer.Render(newDrawing);
 
-		cout << "\n ÀÌµ¿ : È­»ìÇ¥";
-		cout << "\n »öÄ¥ÇÏ±â : z";
-		cout << "\n ÃÊ±âÈ­ : i (ÁÖÀÇ! ÁøÇà»óÈ² ´Ù ³¯¶ó°¨)";
-		cout << "\n ÀúÀåÇÏ±â : q";
-		cout << "\n µÚ·Î°¡±â : Esc\n";
+		cout << "\n ì´ë™ : í™”ì‚´í‘œ";
+		cout << "\n ìƒ‰ì¹ í•˜ê¸° : z";
+		cout << "\n ì´ˆê¸°í™” : i (ì£¼ì˜! ì§„í–‰ìƒí™© ë‹¤ ë‚ ë¼ê°)";
+		cout << "\n ì €ì¥í•˜ê¸° : q";
+		cout << "\n ë’¤ë¡œê°€ê¸° : Esc\n";
 
 		input = _getch();
-		if (input == 224) // ¹æÇâÅ°ÀÏ °æ¿ì
+		if (input == 224) // ë°©í–¥í‚¤ì¼ ê²½ìš°
 			input = _getch();
 
 		switch (input)
 		{
-		case 72: // À§ ¹æÇâÅ°
+		case 72: // ìœ„ ë°©í–¥í‚¤
 			if (newDrawing->GetCurY() > 0)
 				newDrawing->SetCurY(newDrawing->GetCurY() - 1);
 			break;
-		case 80: // ¾Æ·¡ ¹æÇâÅ°
+		case 80: // ì•„ë˜ ë°©í–¥í‚¤
 			if (newDrawing->GetCurY() < height - 1)
 				newDrawing->SetCurY(newDrawing->GetCurY() + 1);
 			break;
-		case 75: // ¿ŞÂÊ ¹æÇâÅ°
+		case 75: // ì™¼ìª½ ë°©í–¥í‚¤
 			if (newDrawing->GetCurX() > 0)
 				newDrawing->SetCurX(newDrawing->GetCurX() - 1);
 			break;
-		case 77: // ¿À¸¥ÂÊ ¹æÇâÅ°
+		case 77: // ì˜¤ë¥¸ìª½ ë°©í–¥í‚¤
 			if (newDrawing->GetCurX() < width - 1)
 				newDrawing->SetCurX(newDrawing->GetCurX() + 1);
 			break;
-		case 'z': // »öÄ¥ÇÏ±â
+		case 'z': // ìƒ‰ì¹ í•˜ê¸°
 			if (newDrawing->GetValue(newDrawing->GetCurY(), newDrawing->GetCurX()) == 0)
 				newDrawing->SetValue(newDrawing->GetCurY(), newDrawing->GetCurX(), 1);
 			else
 				newDrawing->SetValue(newDrawing->GetCurY(), newDrawing->GetCurX(), 0);
 
-			// ¾Æ·¡·Î´Â ½Ç½Ã°£À¸·Î ±×·ÁÁö´Â ±×¸²À» newDrawing°´Ã¼¿¡ ¾÷µ¥ÀÌÆ®ÇÏ´Â ±¸¹®
-			// ÇÑ Ä­ Ä¥ÇØÁú ¶§¸¶´Ù ¼ıÀÚ ÈùÆ®µµ º¯È­ÇÏ´Â °ÍÀ» º¸¿©ÁÖ±â À§ÇØ ¸Å¹ø ¾÷µ¥ÀÌÆ®
+			// ì•„ë˜ë¡œëŠ” ì‹¤ì‹œê°„ìœ¼ë¡œ ê·¸ë ¤ì§€ëŠ” ê·¸ë¦¼ì„ newDrawingê°ì²´ì— ì—…ë°ì´íŠ¸í•˜ëŠ” êµ¬ë¬¸
+			// í•œ ì¹¸ ì¹ í•´ì§ˆ ë•Œë§ˆë‹¤ ìˆ«ì íŒíŠ¸ë„ ë³€í™”í•˜ëŠ” ê²ƒì„ ë³´ì—¬ì£¼ê¸° ìœ„í•´ ë§¤ë²ˆ ì—…ë°ì´íŠ¸
 			newRowList.resize(newDrawing->GetRowCount());
 			newColList.resize(newDrawing->GetColCount());
 			int count;
@@ -361,11 +526,11 @@ void GameManager::AddDrawing()
 			newDrawing->SetRowList(newRowList);
 			newDrawing->SetColList(newColList);
 
-			// °°Àº º¤ÅÍ ¹İº¹¹®¿¡¼­ Àç»ç¿ëÀ» À§ÇØ clearÇÔ
+			// ê°™ì€ ë²¡í„° ë°˜ë³µë¬¸ì—ì„œ ì¬ì‚¬ìš©ì„ ìœ„í•´ clearí•¨
 			newRowList.clear();
 			newColList.clear();
 			break;
-		case 'i': // ´Ù½Ã ±×¸®±â
+		case 'i': // ë‹¤ì‹œ ê·¸ë¦¬ê¸°
 			for (int i = 0; i < height; i++)
 			{
 				for (int j = 0; j < width; j++)
@@ -374,10 +539,11 @@ void GameManager::AddDrawing()
 				}
 			}
 			break;
-		case 'q': // ÇöÀç ±×¸² ÀúÀå
+		case 'q': // í˜„ì¬ ê·¸ë¦¼ ì €ì¥
 			drawingList.push_back(newDrawing);
 			playScene.push_back(new PlayScene(newDrawing));
-		case 27: // EscÅ° µÚ·Î°¡±â
+			return;
+		case 27: // Escí‚¤ ë’¤ë¡œê°€ê¸°
 			return;
 			break;
 		default:
@@ -386,89 +552,89 @@ void GameManager::AddDrawing()
 	}
 }
 
-void GameManager::AddRandomDrawing(int width, int height)
+void GameManager::AddRandomDrawing()
 {
+	int width;
+	int height;
+
+	while (1)
+	{
+		cout << "ê°€ë¡œ ê¸¸ì´ë¥¼ ì…ë ¥í•˜ì„¸ìš” (1 ~ 30) : ";;
+		cin >> width;
+		if (width < 1 || width > 30)
+		{
+			cout << "ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš” \n\n";
+			continue;
+		}
+		else
+			break;
+	}
+
+	while (1)
+	{
+		cout << "ì„¸ë¡œ ê¸¸ì´ë¥¼ ì…ë ¥í•˜ì„¸ìš” (1 ~ 30) : ";;
+		cin >> height;
+		if (height < 1 || height > 30)
+		{
+			cout << "ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš” \n\n";
+			continue;
+		}
+		else
+			break;
+	}
+
 	Drawing* newDrawing = new Drawing(width,height);
 	drawingList.push_back(newDrawing);
+	playScene.push_back(new PlayScene(newDrawing));
 }
 
 void GameManager::RemoveDrawing()
 {
-}
+	char input;
+	int index = 0;
 
-bool GameManager::CheckGameOver(int index)
-{
-	// ÃÑ Ä¥ÇØÁø Ä­ ¼ö°¡ ´Ù¸£¸é °Ë»ç µ¹¸®Áö¾Ê°í ¹Ù·Î false ¹İÈ¯
-	if (playScene[index]->GetPlayerDrawing()->GetValueSum() != drawingList[index]->GetValueSum())
+	while (1)
 	{
-		return false;
-	}
-	else
-	{
-		auto player = playScene[index]->GetPlayerDrawing();
-
-		// row °Ë»ç
-		for (int i = 0; i < player->GetRowCount(); i++)
+		system("cls");
+		if (drawingList.empty())
 		{
-			vector<int> anwerRow = player->GetRowList()[i];
-			vector<int> playerRow;
-			int count = 0;
-
-			for (int j = 0; j < player->GetColCount(); j++)
-			{
-				if (player->GetValue(i, j) == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						playerRow.push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				playerRow.push_back(count);
-
-			if (playerRow.empty())
-				playerRow.push_back(0);
-
-			if (playerRow != anwerRow)
-				return false;
+			cout << "ì§€ìš¸ ê·¸ë¦¼ì´ ì—†ìŠµë‹ˆë‹¤!\n";
+			Sleep(2000);
+			break;
 		}
 
-		// col °Ë»ç
-		for (int i = 0; i < player->GetColCount(); i++)
+		boardViewer.Render(playScene[index]->GetPlayerDrawing());
+		cout << "ê·¸ë¦¼ì´ë™ : ì¢Œ/ìš° í™”ì‚´í‘œ\n";
+		cout << "ì‚­ì œ ê·¸ë¦¼ ì„ íƒ : z (ì£¼ì˜! ì„ íƒ ì¦‰ì‹œ ì‚­ì œë¨)\n";
+		cout << "ë’¤ë¡œê°€ê¸° : Esc\n";
+
+		input = _getch();
+		if (input == 224) // ë°©í–¥í‚¤ì¼ ê²½ìš°
+			input = _getch();
+
+		switch (input)
 		{
-			vector<int> answerCol = player->GetColList()[i];
-			vector<int> playerCol;
-			int count = 0;
-
-			for (int j = 0; j < player->GetRowCount(); j++)
-			{
-				if (player->GetValue(j, i) == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						playerCol.push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				playerCol.push_back(count);
-
-			if (playerCol.empty())
-				playerCol.push_back(0);
-
-			if (playerCol != answerCol)
-				return false;
+		case 75: // ì™¼ìª½ ë°©í–¥í‚¤
+			if (index > 0)
+				index--;
+			break;
+		case 77: // ì˜¤ë¥¸ìª½ ë°©í–¥í‚¤
+			if (index < playScene.size() - 1)
+				index++;
+			break;
+		case 'z': // ì‚­ì œí•  ê·¸ë¦¼ ì„ íƒ
+			system("cls");
+			drawingList.erase(drawingList.begin() + index); 
+			playScene.erase(playScene.begin() + index);
+			index = 0;
+			break;
+		case 27: // Escí‚¤ ë’¤ë¡œê°€ê¸°
+			return;
+			break;
+		default:
+			break;
 		}
-
-		return true;
 	}
 }
+
+

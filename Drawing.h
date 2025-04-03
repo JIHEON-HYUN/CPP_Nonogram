@@ -7,30 +7,29 @@ using namespace std;
 class Drawing
 {
 private:
-	// 이 그림 객체의 색칠 배열이 저장된 2차원벡터
+	// 이 그림 객체의 색칠 배열 저장
 	// drawing[행][열], 빈 칸이면 값이 0, 색칠(초록)됐으면 값이 1, X(빨강)표시는 2
 	vector<vector<int>> drawing; 
 
-	// 각 행마다 연속된 색칠(초록)칸이 몇개인지 저장된 2차원 벡터
+	// Row의 숫자 힌트 저장
 	vector<vector<int>> rowList; 
 
-	// 각 열마다 연속된 색칠(초록)칸이 몇개인지 저장된 2차원 벡터
+	// Col의 숫자 힌트 저장
 	vector<vector<int>> colList; 
 
-	int curX; // 현재 커서 위치 출력을 위한 X좌표 변수
-	int curY; // 현재 커서 위치 출력을 위한 Y좌표 변수
+	int curX; // 현재 커서 X좌표
+	int curY; // 현재 커서 Y좌표
 
 public:
-	// 입력받은 그림으로 Drawing 객체 생성
+	// 인자로 전달받은 그림으로 Drawing 객체 생성
 	Drawing(vector<vector<int>> inputDrawing); 
 
-	// 입력받은 가로, 세로 길이로 랜덤한 배치의 Drawing 객체 생성
+	// 인자로 전달받은 가로, 세로 길이로 랜덤한 배치의 Drawing 객체 생성
 	Drawing(int width, int height); 
 
 	// 복사생성자 => PlayScene의 playerDrawing을 생성하는 데 사용
 	// PlayScene에서 값을 변경할 때, 정답 Drawing의 원본데이터는 변경하면 안되므로, 깊은 복사로 진행
 	Drawing(const Drawing& drawing); 
-
 	~Drawing();
 
 	vector<vector<int>> GetRowList();
