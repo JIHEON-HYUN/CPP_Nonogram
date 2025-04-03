@@ -5,6 +5,7 @@
 PlayScene::PlayScene(Drawing* drawing)
 {
 	playerDrawing = new Drawing(*drawing);
+	Init();
 }
 
 PlayScene::~PlayScene()

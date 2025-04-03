@@ -2,6 +2,7 @@
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
+#include <string>
 
 GameManager::GameManager()
 {
@@ -92,14 +93,6 @@ GameManager::GameManager()
 	playScene.push_back(new PlayScene(drawingList[5]));
 	drawingList.push_back(new Drawing(3, 10));
 	playScene.push_back(new PlayScene(drawingList[6]));
-
-	playScene[0]->Init();
-	playScene[1]->Init();
-	playScene[2]->Init();
-	playScene[3]->Init();
-	playScene[4]->Init();
-	playScene[5]->Init();
-	playScene[6]->Init();
 }
 
 GameManager::~GameManager()
@@ -131,6 +124,8 @@ void GameManager::ShowGameMenu()
 		cout << "뒤로가기 : Esc\n";
 
 		input = _getch();
+		if (input == 224) // 방향키일 경우
+			input = _getch();
 
 		switch (input)
 		{
@@ -157,6 +152,47 @@ void GameManager::ShowGameMenu()
 
 void GameManager::ShowEditMenu()
 {
+	char input;
+	int index = 0;
+
+	while (1)
+	{
+		system("cls");
+		cout << "1. 사용자 그림 추가\n\n";
+		cout << "2. 랜덤 그림 추가\n\n";
+		cout << "3. 그림 삭제\n\n";
+		cout << "이동 : 화살표\n";
+		cout << "선택 : z\n";
+		cout << "뒤로가기 : esc\n";
+
+		input = _getch();
+		if (input == 224) // 방향키일 경우
+			input = _getch();
+
+		switch (input)
+		{
+		case 72: // 위 방향키
+			if (index > 0)
+				index--;
+			break;
+		case 80: // 아래 방향키
+			if (index < 2)
+				index++;
+			break;
+		case 'z': // 메뉴 선택
+			system("cls");
+			switch (index)
+			{
+				
+			}
+			break;
+		case 27: // Esc키 뒤로가기
+			return;
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void GameManager::GameStart(int index)
@@ -171,10 +207,11 @@ void GameManager::GameStart(int index)
 		checkContinue = playScene[index]->PlayerDraw();
 
 		if (!checkContinue)
-			break;
+			break; // PlayerDraw()에서 뒤로가기를 누르면 즉시 반복 탈출
 	}
 
 	// 그림이 완성되면 현재 커서위치를 그림 격자 밖으로 빼서 완성본을 출력
+	// PlayerDraw()에서 뒤로가기를 누르면 false가 반환되어 조건문 안 코드는 실행 X 
 	if (checkContinue)
 	{
 		system("cls");
@@ -188,20 +225,54 @@ void GameManager::GameStart(int index)
 	}
 }
 
-void GameManager::AddDrawing(int width, int height)
+void GameManager::AddDrawing()
 {
+	int width;
+	int height;
+
+	while (1)
+	{
+		cout << "가로 길이를 입력하세요 (1 ~ 30) : ";;
+		cin >> width;
+		if (width < 1 || width > 30)
+		{
+			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
+			continue;
+		}
+		else
+			break;
+	}
+
+	while (1)
+	{
+		cout << "세로 길이를 입력하세요 (1 ~ 30) : ";;
+		cin >> height;
+		if (height < 1 || height > 30)
+		{
+			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
+			continue;
+		}
+		else
+			break;
+	}
+
 	vector<vector<int>> newBoard(height, vector<int>(width, 0));
+	Drawing* newDrawing = new Drawing(newBoard);
+
 	vector<vector<int>> newRowList;
 	vector<vector<int>> newColList;
-	Drawing* newDrawing = new Drawing(newBoard);
 	char input;
 
 	while (1)
 	{
-		COORD pos = { (SHORT)0, (SHORT)0 };
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-
+		system("cls");
 		boardViewer.Render(newDrawing);
+
+		cout << "\n 이동 : 화살표";
+		cout << "\n 색칠하기 : z";
+		cout << "\n 초기화 : i (주의! 진행상황 다 날라감)";
+		cout << "\n 저장하기 : q";
+		cout << "\n 뒤로가기 : Esc\n";
 
 		input = _getch();
 		if (input == 224) // 방향키일 경우
@@ -230,6 +301,69 @@ void GameManager::AddDrawing(int width, int height)
 				newDrawing->SetValue(newDrawing->GetCurY(), newDrawing->GetCurX(), 1);
 			else
 				newDrawing->SetValue(newDrawing->GetCurY(), newDrawing->GetCurX(), 0);
+
+			// 아래로는 실시간으로 그려지는 그림을 newDrawing객체에 업데이트하는 구문
+			// 한 칸 칠해질 때마다 숫자 힌트도 변화하는 것을 보여주기 위해 매번 업데이트
+			newRowList.resize(newDrawing->GetRowCount());
+			newColList.resize(newDrawing->GetColCount());
+			int count;
+
+			for (int i = 0; i < newRowList.size(); i++)
+			{
+				count = 0;
+
+				for (int j = 0; j < newColList.size(); j++)
+				{
+					if (newDrawing->GetValue(i, j) == 1)
+						count++;
+					else
+					{
+						if (count != 0)
+						{
+							newRowList[i].push_back(count);
+							count = 0;
+						}
+					}
+				}
+
+				if (count != 0)
+					newRowList[i].push_back(count);
+
+				if (newRowList[i].empty())
+					newRowList[i].push_back(0);
+			}
+
+			for (int i = 0; i < newColList.size(); i++)
+			{
+				count = 0;
+
+				for (int j = 0; j < newRowList.size(); j++)
+				{
+					if (newDrawing->GetValue(j, i) == 1)
+						count++;
+					else
+					{
+						if (count != 0)
+						{
+							newColList[i].push_back(count);
+							count = 0;
+						}
+					}
+				}
+
+				if (count != 0)
+					newColList[i].push_back(count);
+
+				if (newColList[i].empty())
+					newColList[i].push_back(0);
+			}
+
+			newDrawing->SetRowList(newRowList);
+			newDrawing->SetColList(newColList);
+
+			// 같은 벡터 반복문에서 재사용을 위해 clear함
+			newRowList.clear();
+			newColList.clear();
 			break;
 		case 'i': // 다시 그리기
 			for (int i = 0; i < height; i++)
@@ -240,73 +374,16 @@ void GameManager::AddDrawing(int width, int height)
 				}
 			}
 			break;
+		case 'q': // 현재 그림 저장
+			drawingList.push_back(newDrawing);
+			playScene.push_back(new PlayScene(newDrawing));
 		case 27: // Esc키 뒤로가기
 			return;
 			break;
 		default:
 			break;
 		}
-
-		newRowList.resize(newDrawing->GetColCount());
-		newColList.resize(newDrawing->GetRowCount());
-		int count; // 연속해서 색칠해지는 숫자 값 저장하는 변수
-
-		// newBoard의 각 row별 연속해서 색칠해지는 숫자 값들 저장
-		for (int i = 0; i < newRowList.size(); i++)
-		{
-			count = 0;
-
-			for (int j = 0; j < newBoard[0].size(); j++)
-			{
-				if (newBoard[i][j] == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						newRowList[i].push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				newRowList[i].push_back(count);
-
-			if (newRowList[i].empty())
-				newRowList[i].push_back(0);
-		}
-
-		// newBoard의 각 col별 연속해서 색칠해지는 숫자 값들 저장
-		for (int i = 0; i < newColList.size(); i++)
-		{
-			count = 0;
-
-			for (int j = 0; j < newBoard.size(); j++)
-			{
-				if (newBoard[j][i] == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						newColList[i].push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				newColList[i].push_back(count);
-
-			if (newColList[i].empty())
-				newColList[i].push_back(0);
-		}
-
-		newDrawing->SetRowList(newRowList);
-		newDrawing->SetColList(newColList);
 	}
-
 }
 
 void GameManager::AddRandomDrawing(int width, int height)

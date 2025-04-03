@@ -22,7 +22,7 @@ public:
 	void ShowGameMenu();
 	void ShowEditMenu();
 	void GameStart(int index); // index번째 playScene의 게임시작
-	void AddDrawing(int width, int height);
+	void AddDrawing();
 	void AddRandomDrawing(int width, int height);
 	void RemoveDrawing();
 	bool CheckGameOver(int index);
