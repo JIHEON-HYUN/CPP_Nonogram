@@ -6,6 +6,9 @@ AutoSolver::AutoSolver()
 
 AutoSolver::~AutoSolver()
 {
+	for (auto solver : solverDrawing)
+		delete solver;
+	solverDrawing.clear();
 }
 
 vector<Drawing*> AutoSolver::Solution(Drawing* drawing)
@@ -43,65 +46,89 @@ bool AutoSolver::CheckGameOver(PlayScene* playScene, Drawing* drawing)
 		// row 검사
 		for (int i = 0; i < player->GetRowCount(); i++)
 		{
-			vector<int> anwerRow = player->GetRowList()[i];
-			vector<int> playerRow;
-			int count = 0;
-
-			for (int j = 0; j < player->GetColCount(); j++)
-			{
-				if (player->GetValue(i, j) == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						playerRow.push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				playerRow.push_back(count);
-
-			if (playerRow.empty())
-				playerRow.push_back(0);
-
-			if (playerRow != anwerRow)
+			if (!CheckRow(playScene, drawing, i))
 				return false;
 		}
 
 		// col 검사
 		for (int i = 0; i < player->GetColCount(); i++)
 		{
-			vector<int> answerCol = player->GetColList()[i];
-			vector<int> playerCol;
-			int count = 0;
-
-			for (int j = 0; j < player->GetRowCount(); j++)
-			{
-				if (player->GetValue(j, i) == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						playerCol.push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				playerCol.push_back(count);
-
-			if (playerCol.empty())
-				playerCol.push_back(0);
-
-			if (playerCol != answerCol)
+			if (!CheckCol(playScene, drawing, i))
 				return false;
 		}
 
 		return true;
 	}
+}
+
+bool AutoSolver::CheckRow(PlayScene* playScene, Drawing* drawing, int index)
+{
+	auto player = playScene->GetPlayerDrawing();
+	vector<int> answerRow = player->GetRowList()[index];
+	vector<int> playerRow;
+	int count = 0;
+
+	// drawing의 rowList 만드는 방법과 동일하게 playerRow 생성
+	for (int j = 0; j < player->GetColCount(); j++)
+	{
+		if (player->GetValue(index, j) == 1)
+			count++;
+		else
+		{
+			if (count != 0)
+			{
+				playerRow.push_back(count);
+				count = 0;
+			}
+		}
+	}
+
+	if (count != 0)
+		playerRow.push_back(count);
+
+	if (playerRow.empty())
+		playerRow.push_back(0);
+
+	// playerRow와 answerRow가 다르면 false 반환
+	if (playerRow != answerRow)
+		return false;
+	
+	// playerRow와 answerRow가 같으면 true 반환
+	return true;
+}
+
+bool AutoSolver::CheckCol(PlayScene* playScene, Drawing* drawing, int index)
+{
+	auto player = playScene->GetPlayerDrawing();
+	vector<int> answerCol = player->GetColList()[index];
+	vector<int> playerCol;
+	int count = 0;
+
+	// drawing의 colList 만드는 방법과 동일하게 playerCol 생성
+	for (int j = 0; j < player->GetRowCount(); j++)
+	{
+		if (player->GetValue(j, index) == 1)
+			count++;
+		else
+		{
+			if (count != 0)
+			{
+				playerCol.push_back(count);
+				count = 0;
+			}
+		}
+	}
+
+	if (count != 0)
+		playerCol.push_back(count);
+
+	if (playerCol.empty())
+		playerCol.push_back(0);
+
+	// playerCol와 answerCol이 다르면 false 반환
+	if (playerCol != answerCol)
+		return false;
+	
+	// playerCol와 answerCol이 다르면 true 반환
+	return true;
 }

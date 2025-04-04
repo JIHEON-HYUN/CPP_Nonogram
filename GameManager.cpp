@@ -98,12 +98,12 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
-	for (int i = 0; i < drawingList.size(); i++)
-		delete drawingList[i];
+	for (auto draw : drawingList)
+		delete draw;
 	drawingList.clear();
 
-	for (int i = 0; i < playScene.size(); i++)
-		delete playScene[i];
+	for (auto play : playScene)
+		delete play;
 	playScene.clear();
 }	
 
