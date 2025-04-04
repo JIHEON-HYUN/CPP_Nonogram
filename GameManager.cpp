@@ -92,6 +92,8 @@ GameManager::GameManager()
 	playScene.push_back(new PlayScene(drawingList[4]));
 	drawingList.push_back(new Drawing(exam2));
 	playScene.push_back(new PlayScene(drawingList[5]));
+
+
 }
 
 GameManager::~GameManager()
@@ -289,7 +291,7 @@ void GameManager::GameStart(int index)
 	bool checkContinue = false;
 
 	// 플레이어가 그린 그림이 정답일 때까지 반복
-	while (!CheckGameOver(index))
+	while (!autoSolver.CheckGameOver(playScene[index], drawingList[index]))
 	{
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());
 		checkContinue = playScene[index]->PlayerDraw();
@@ -310,83 +312,6 @@ void GameManager::GameStart(int index)
 
 		// 완성 메세지 이후 해당 그림 초기화
 		playScene[index]->Init();
-	}
-}
-
-bool GameManager::CheckGameOver(int index)
-{
-	// 총 칠해진 칸 수가 다르면 검사 돌리지않고 바로 false 반환
-	if (playScene[index]->GetPlayerDrawing()->GetValueSum() != drawingList[index]->GetValueSum())
-	{
-		return false;
-	}
-	else
-	{
-		auto player = playScene[index]->GetPlayerDrawing();
-
-		// row 검사
-		for (int i = 0; i < player->GetRowCount(); i++)
-		{
-			vector<int> anwerRow = player->GetRowList()[i];
-			vector<int> playerRow;
-			int count = 0;
-
-			for (int j = 0; j < player->GetColCount(); j++)
-			{
-				if (player->GetValue(i, j) == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						playerRow.push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				playerRow.push_back(count);
-
-			if (playerRow.empty())
-				playerRow.push_back(0);
-
-			if (playerRow != anwerRow)
-				return false;
-		}
-
-		// col 검사
-		for (int i = 0; i < player->GetColCount(); i++)
-		{
-			vector<int> answerCol = player->GetColList()[i];
-			vector<int> playerCol;
-			int count = 0;
-
-			for (int j = 0; j < player->GetRowCount(); j++)
-			{
-				if (player->GetValue(j, i) == 1)
-					count++;
-				else
-				{
-					if (count != 0)
-					{
-						playerCol.push_back(count);
-						count = 0;
-					}
-				}
-			}
-
-			if (count != 0)
-				playerCol.push_back(count);
-
-			if (playerCol.empty())
-				playerCol.push_back(0);
-
-			if (playerCol != answerCol)
-				return false;
-		}
-
-		return true;
 	}
 }
 

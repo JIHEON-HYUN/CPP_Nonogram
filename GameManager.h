@@ -25,7 +25,6 @@ public:
 
 	// GameMenu
 	void GameStart(int index);
-	bool CheckGameOver(int index);
 
 	// EditMenu
 	void AddDrawing();
