@@ -214,7 +214,8 @@ int Drawing::GetRowSum(int index)
 	int sum = 0;
 	for (int j = 0; j < GetColCount(); j++)
 	{
-		sum += drawing[index][j];
+		if(drawing[index][j] == 1)
+			sum += drawing[index][j];
 	}
 
 	return sum;
@@ -225,7 +226,8 @@ int Drawing::GetColSum(int index)
 	int sum = 0;
 	for (int j = 0; j < GetRowCount(); j++)
 	{
-		sum += drawing[j][index];
+		if(drawing[j][index] == 1)
+			sum += drawing[j][index];
 	}
 
 	return sum;

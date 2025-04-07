@@ -1,4 +1,5 @@
 #include "AutoSolver.h"
+#include <iostream>
 
 AutoSolver::AutoSolver()
 {
@@ -19,33 +20,33 @@ void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 	solverDrawingList.clear();
 
 	Drawing* solverDrawing = new Drawing(*playScene->GetPlayerDrawing());
+
+	//// row가 완성됐으면 나머지 칸의 값은 2(X표시)로 설정
+	//for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+	//{
+	//	if (CheckRow(playScene->GetPlayerDrawing(), drawing, i))
+	//	{
+	//		for (int j = 0; j < solverDrawing->GetColCount(); j++)
+	//		{
+	//			if (solverDrawing->GetValue(i, j) == 0)
+	//				solverDrawing->SetValue(i, j, 2);
+	//		}
+	//	}
+	//}
+
+	//// col이 완성됐으면 나머지 칸의 값은 2(X표시)로 설정
+	//for (int i = 0; i < solverDrawing->GetColCount(); i++)
+	//{
+	//	if (CheckCol(playScene->GetPlayerDrawing(), drawing, i))
+	//	{
+	//		for (int j = 0; j < solverDrawing->GetRowCount(); j++)
+	//		{
+	//			if (solverDrawing->GetValue(j, i) == 0)
+	//				solverDrawing->SetValue(j, i, 2);
+	//		}
+	//	}
+	//}
 	
-	// row가 완성됐으면 나머지 칸의 값은 2(X표시)로 설정
-	for (int i = 0; i < solverDrawing->GetRowCount(); i++)
-	{
-		if (CheckRow(playScene->GetPlayerDrawing(), drawing, i))
-		{
-			for (int j = 0; j < solverDrawing->GetColCount(); j++)
-			{
-				if (solverDrawing->GetValue(i, j) == 0)
-					solverDrawing->SetValue(i, j, 2);
-			}
-		}
-	}
-
-	// col이 완성됐으면 나머지 칸의 값은 2(X표시)로 설정
-	for (int i = 0; i < solverDrawing->GetColCount(); i++)
-	{
-		if (CheckCol(playScene->GetPlayerDrawing(), drawing, i))
-		{
-			for (int j = 0; j < solverDrawing->GetRowCount(); j++)
-			{
-				if (solverDrawing->GetValue(j, i) == 0)
-					solverDrawing->SetValue(j, i, 2);
-			}
-		}
-	}
-
 	// left, right solve가 일치하는 부분 색칠
 
 	// 논리적 추론이 끝난 후, 재귀반복을 통해 정답을 찾음
@@ -85,8 +86,10 @@ void AutoSolver::FindAllSolutionDFS(PlayScene* playScene, Drawing* drawing, Draw
 	{
 		solverDrawing->SetValue(rowIndex, colIndex, i);
 		
-		if (CheckRow(solverDrawing, drawing, rowIndex) && CheckCol(solverDrawing, drawing, colIndex))
+		if (IsRowValid(solverDrawing, drawing, rowIndex) && IsColValid(solverDrawing, drawing, colIndex))
+		{
 			FindAllSolutionDFS(playScene, drawing, solverDrawing, nextRowIndex, nextColIndex);
+		}
 
 		// 재귀 완료 후에, 이전 상태로 되돌림 (현재 위치의 값이 0이었음)
 		solverDrawing->SetValue(rowIndex, colIndex, 0);
@@ -159,9 +162,9 @@ bool AutoSolver::CheckRow(Drawing* solverDrawing, Drawing* drawing, int index)
 	int count = 0;
 
 	// drawing의 rowList 만드는 방법과 동일하게 playerRow 생성
-	for (int j = 0; j < sol->GetColCount(); j++)
+	for (int i = 0; i < sol->GetColCount(); i++)
 	{
-		if (sol->GetValue(index, j) == 1)
+		if (sol->GetValue(index, i) == 1)
 			count++;
 		else
 		{
@@ -179,11 +182,9 @@ bool AutoSolver::CheckRow(Drawing* solverDrawing, Drawing* drawing, int index)
 	if (solRow.empty())
 		solRow.push_back(0);
 
-	// solRow와 answerRow가 다르면 false 반환
 	if (solRow != answerRow)
 		return false;
 	
-	// solRow와 answerRow가 같으면 true 반환
 	return true;
 }
 
@@ -195,9 +196,9 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int index)
 	int count = 0;
 
 	// drawing의 colList 만드는 방법과 동일하게 playerCol 생성
-	for (int j = 0; j < sol->GetRowCount(); j++)
+	for (int i = 0; i < sol->GetRowCount(); i++)
 	{
-		if (sol->GetValue(j, index) == 1)
+		if (sol->GetValue(i, index) == 1)
 			count++;
 		else
 		{
@@ -215,10 +216,106 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int index)
 	if (solCol.empty())
 		solCol.push_back(0);
 
-	// solCol과 answerCol이 다르면 false 반환
 	if (solCol != answerCol)
 		return false;
-	
-	// playerCol과 answerCol이 다르면 true 반환
+
+	return true;
+}
+
+bool AutoSolver::IsRowValid(Drawing* solverDrawing, Drawing* drawing, int rowIndex)
+{
+	auto hint = drawing->GetRowList()[rowIndex];
+	vector<int> blocks;
+	int count = 0;
+
+	for (int i = 0; i < solverDrawing->GetColCount(); i++)
+	{
+		int val = solverDrawing->GetValue(rowIndex, i);
+		if (val == 1) count++;
+		else if (count > 0)
+		{
+			blocks.push_back(count);
+			count = 0;
+		}
+	}
+	if (count > 0) blocks.push_back(count);
+
+	// 블록 수가 힌트보다 많으면 무조건 컷
+	if (blocks.size() > hint.size()) return false;
+
+	// 지금까지 만들어진 블록이 힌트를 초과하지 않는지 확인
+	for (size_t i = 0; i < blocks.size(); i++)
+	{
+		if (blocks[i] > hint[i]) return false;
+	}
+
+	// 남은 칸으로 블록을 만들 수 있는지 판단
+	int remain = 0;
+	for (int i = 0; i < solverDrawing->GetColCount(); i++)
+	{
+		if (solverDrawing->GetValue(rowIndex, i) == 0)
+			remain++;
+	}
+
+	// 남은 힌트 블록 길이 합 + 최소 구분 칸 수
+	int totalNeed = 0;
+	if (hint.size() > blocks.size())
+	{
+		for (size_t i = blocks.size(); i < hint.size(); i++)
+			totalNeed += hint[i];
+		totalNeed += (hint.size() - blocks.size() - 1);
+	}
+
+	if (remain < totalNeed) return false;
+
+	return true;
+}
+
+bool AutoSolver::IsColValid(Drawing* solverDrawing, Drawing* drawing, int colIndex)
+{
+	auto hint = drawing->GetColList()[colIndex];
+	vector<int> blocks;
+	int count = 0;
+
+	for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+	{
+		int val = solverDrawing->GetValue(i, colIndex);
+		if (val == 1) count++;
+		else if (count > 0)
+		{
+			blocks.push_back(count);
+			count = 0;
+		}
+	}
+	if (count > 0) blocks.push_back(count);
+
+	// 블록 수가 힌트보다 많으면 무조건 컷
+	if (blocks.size() > hint.size()) return false;
+
+	// 지금까지 만들어진 블록이 힌트를 초과하지 않는지 확인
+	for (size_t i = 0; i < blocks.size(); i++)
+	{
+		if (blocks[i] > hint[i]) return false;
+	}
+
+	// 남은 칸으로 블록을 만들 수 있는지 판단
+	int remain = 0;
+	for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+	{
+		if (solverDrawing->GetValue(i, colIndex) == 0)
+			remain++;
+	}
+
+	// 남은 힌트 블록 길이 합 + 최소 구분 칸 수
+	int totalNeed = 0;
+	if (hint.size() > blocks.size())
+	{
+		for (size_t i = blocks.size(); i < hint.size(); i++)
+			totalNeed += hint[i];
+		totalNeed += (hint.size() - blocks.size() - 1);
+	}
+
+	if (remain < totalNeed) return false;
+
 	return true;
 }
