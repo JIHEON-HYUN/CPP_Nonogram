@@ -291,7 +291,7 @@ void GameManager::GameStart(int index)
 	bool checkContinue = false;
 
 	// 플레이어가 그린 그림이 정답일 때까지 반복
-	while (!autoSolver.CheckGameOver(playScene[index], drawingList[index]))
+	while (!autoSolver.CheckGameOver(playScene[index]->GetPlayerDrawing(), drawingList[index]))
 	{
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());
 		checkContinue = playScene[index]->PlayerDraw();

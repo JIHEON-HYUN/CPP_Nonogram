@@ -24,9 +24,9 @@ public:
 	bool CheckUniqueSolution(PlayScene* playScene, Drawing* drawing);
 
 	// 그림이 완성됐는지 확인
-	bool CheckGameOver(PlayScene* playScene, Drawing* drawing);
-	bool CheckRow(PlayScene* playScene, Drawing* drawing, int index);
-	bool CheckCol(PlayScene* playScene, Drawing* drawing, int index);
+	bool CheckGameOver(Drawing* solverDrawing, Drawing* drawing);
+	bool CheckRow(Drawing* solverDrawing, Drawing* drawing, int index);
+	bool CheckCol(Drawing* solverDrawing, Drawing* drawing, int index);
 
 	// 정답 목록 return
 	vector<Drawing*> GetSolverDrawingList();
