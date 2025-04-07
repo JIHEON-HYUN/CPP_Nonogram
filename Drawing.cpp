@@ -199,27 +199,47 @@ void Drawing::SetCurY(int newCurY)
 	curY = newCurY;
 }
 
+void Drawing::SetValue(int index1, int index2, int value)
+{
+	drawing[index1][index2] = value;
+}
+
 int Drawing::GetValue(int index1, int index2)
 {
 	return drawing[index1][index2];
 }
 
-int Drawing::GetValueSum()
+int Drawing::GetRowSum(int index)
 {
 	int sum = 0;
-
-	for (int i = 0; i < rowList.size(); i++)
+	for (int j = 0; j < GetColCount(); j++)
 	{
-		for (int j = 0; j < rowList[i].size(); j++)
-		{
-			sum += rowList[i][j];
-		}
+		sum += drawing[index][j];
 	}
 
 	return sum;
 }
 
-void Drawing::SetValue(int index1, int index2, int value)
+int Drawing::GetColSum(int index)
 {
-	drawing[index1][index2] = value;
+	int sum = 0;
+	for (int j = 0; j < GetRowCount(); j++)
+	{
+		sum += drawing[j][index];
+	}
+
+	return sum;
 }
+
+int Drawing::GetAllSum()
+{
+	int sum = 0;
+	for (int i = 0; i < GetRowCount(); i++)
+	{
+		sum += GetRowSum(i);
+	}
+
+	return sum;
+}
+
+

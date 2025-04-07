@@ -8,14 +8,14 @@ using namespace std;
 class AutoSolver
 {
 private:
-	vector<Drawing*> solverDrawing;
+	vector<Drawing*> solverDrawingList;
 
 public:
 	AutoSolver();
 	~AutoSolver();
 
 	// 노노그램은 반드시 해답이 한 개로 보장되지 않음 => 해답들을 vector에 push하여 반환
-	vector<Drawing*> Solution(Drawing* drawing);
+	Drawing* Solution(Drawing* solverDrawing);
 
 	// 해답이 한 개면 true, 아니면 false
 	bool CheckUniqueSolution();

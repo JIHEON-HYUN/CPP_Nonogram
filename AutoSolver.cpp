@@ -6,22 +6,20 @@ AutoSolver::AutoSolver()
 
 AutoSolver::~AutoSolver()
 {
-	for (auto solver : solverDrawing)
+	for (auto solver : solverDrawingList)
 		delete solver;
-	solverDrawing.clear();
+	solverDrawingList.clear();
 }
 
-vector<Drawing*> AutoSolver::Solution(Drawing* drawing)
+Drawing* AutoSolver::Solution(Drawing* solverDrawing)
 {
 	
-
-	return solverDrawing;
 }
 
 bool AutoSolver::CheckUniqueSolution()
 {
 	// Solution()에서 저장된 solverDrawing이 한 개면 해답이 유일함
-	if (solverDrawing.size() == 1)
+	if (solverDrawingList.size() == 1)
 		return true;
 	else
 		return false;
@@ -35,7 +33,7 @@ void AutoSolver::GetHint(PlayScene* playScene, Drawing* drawing)
 bool AutoSolver::CheckGameOver(PlayScene* playScene, Drawing* drawing)
 {
 	// 총 칠해진 칸 수가 다르면 검사 돌리지않고 바로 false 반환
-	if (playScene->GetPlayerDrawing()->GetValueSum() != drawing->GetValueSum())
+	if (playScene->GetPlayerDrawing()->GetAllSum() != drawing->GetAllSum())
 	{
 		return false;
 	}
@@ -125,10 +123,10 @@ bool AutoSolver::CheckCol(PlayScene* playScene, Drawing* drawing, int index)
 	if (playerCol.empty())
 		playerCol.push_back(0);
 
-	// playerCol와 answerCol이 다르면 false 반환
+	// playerCol과 answerCol이 다르면 false 반환
 	if (playerCol != answerCol)
 		return false;
 	
-	// playerCol와 answerCol이 다르면 true 반환
+	// playerCol과 answerCol이 다르면 true 반환
 	return true;
 }

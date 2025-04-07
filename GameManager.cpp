@@ -80,17 +80,17 @@ GameManager::GameManager()
 		{1,1,0}
 	};
 
-	drawingList.push_back(new Drawing(exam6));
-	playScene.push_back(new PlayScene(drawingList[0]));
-	drawingList.push_back(new Drawing(exam5));
-	playScene.push_back(new PlayScene(drawingList[1]));
-	drawingList.push_back(new Drawing(exam4));
-	playScene.push_back(new PlayScene(drawingList[2]));
 	drawingList.push_back(new Drawing(exam1));
-	playScene.push_back(new PlayScene(drawingList[3]));
-	drawingList.push_back(new Drawing(exam3));
-	playScene.push_back(new PlayScene(drawingList[4]));
+	playScene.push_back(new PlayScene(drawingList[0]));
 	drawingList.push_back(new Drawing(exam2));
+	playScene.push_back(new PlayScene(drawingList[1]));
+	drawingList.push_back(new Drawing(exam3));
+	playScene.push_back(new PlayScene(drawingList[2]));
+	drawingList.push_back(new Drawing(exam4));
+	playScene.push_back(new PlayScene(drawingList[3]));
+	drawingList.push_back(new Drawing(exam5));
+	playScene.push_back(new PlayScene(drawingList[4]));
+	drawingList.push_back(new Drawing(exam6));
 	playScene.push_back(new PlayScene(drawingList[5]));
 
 

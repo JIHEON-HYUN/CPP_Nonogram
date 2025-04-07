@@ -45,8 +45,11 @@ public:
 	void SetCurX(int newCurX);
 	void SetCurY(int newCurY);
 
-	int GetValue(int index1, int index2); // drawing[index1][index2]에 저장된 value return
-	int GetValueSum();
 	void SetValue(int index1, int index2, int value); // drawing[index1][index2]의 값을 value값으로 변경
+	int GetValue(int index1, int index2); // drawing[index1][index2]에 저장된 value return
+	int GetRowSum(int index);
+	int GetColSum(int index);
+	int GetAllSum();
+	
 };
 
