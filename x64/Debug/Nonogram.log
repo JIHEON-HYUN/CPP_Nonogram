@@ -1,13 +1,2 @@
-﻿  AutoSolver.cpp
-  BoardViewer.cpp
-C:\CPP\Hello\Nonogram\Nonogram\BoardViewer.cpp(28,26): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\CPP\Hello\Nonogram\Nonogram\BoardViewer.cpp(35,26): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Drawing.cpp
-C:\CPP\Hello\Nonogram\Nonogram\Drawing.cpp(174,21): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\CPP\Hello\Nonogram\Nonogram\Drawing.cpp(179,21): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  GameManager.cpp
-  Main.cpp
-C:\CPP\Hello\Nonogram\Nonogram\Main.cpp(10,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  PlayScene.cpp
-  코드를 생성하고 있습니다...
-C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(18,1): error C4700: 초기화되지 않은 'solution' 지역 변수를 사용했습니다.
+﻿  GameManager.cpp
+  Nonogram.vcxproj -> C:\CPP\Hello\Nonogram\x64\Debug\Nonogram.exe

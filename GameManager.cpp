@@ -467,6 +467,7 @@ void GameManager::AddDrawing()
 		case 'q': // 현재 그림 저장
 			drawingList.push_back(newDrawing);
 			playScene.push_back(new PlayScene(newDrawing));
+			Sleep(5000);
 			return;
 		case 27: // Esc키 뒤로가기
 			return;
@@ -511,6 +512,10 @@ void GameManager::AddRandomDrawing()
 	Drawing* newDrawing = new Drawing(width,height);
 	drawingList.push_back(newDrawing);
 	playScene.push_back(new PlayScene(newDrawing));
+
+	autoSolver.Solution(playScene[playScene.size() - 1], drawingList[drawingList.size() - 1]);
+	cout << "해답 개수 : " << autoSolver.GetSolverDrawingList().size() << endl;
+	Sleep(3000);
 }
 
 void GameManager::RemoveDrawing()

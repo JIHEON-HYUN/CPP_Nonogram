@@ -28,7 +28,7 @@ public:
 	Drawing(int width, int height); 
 
 	// 복사생성자 => PlayScene의 playerDrawing을 생성하는 데 사용
-	// PlayScene에서 값을 변경할 때, 정답 Drawing의 원본데이터는 변경하면 안되므로, 깊은 복사로 진행
+	// 정답 Drawing의 원본데이터는 변경하면 안되므로, 깊은 복사로 진행
 	Drawing(const Drawing& drawing); 
 	~Drawing();
 
