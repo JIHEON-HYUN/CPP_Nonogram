@@ -4,6 +4,8 @@
 #include <conio.h>
 #include <string>
 
+GameManager* GameManager::gm = nullptr;
+
 GameManager::GameManager()
 {
 	// GameManager 생성될 때, 사전에 그림 목록 저장
@@ -106,6 +108,25 @@ GameManager::~GameManager()
 		delete play;
 	playScene.clear();
 }	
+
+GameManager* GameManager::GetGM()
+{
+	// 싱글톤 인스턴스가 nullptr이면, 즉 아직 생성이 안됐으면 전역 싱글톤 인스턴스 생성
+	if (!gm)
+		gm = new GameManager();
+
+	return gm;
+}
+
+void GameManager::DestroyGM()
+{
+	// 싱글톤 인스턴스가 nullptr이 아니면, 즉 메모리 할당이 됐으면 메모리 해제
+	if (gm)
+	{
+		delete gm;
+		gm = nullptr;
+	}
+}
 
 void GameManager::ShowMenu()
 {
@@ -322,9 +343,9 @@ void GameManager::AddDrawing()
 
 	while (1)
 	{
-		cout << "가로 길이를 입력하세요 (1 ~ 30) : ";;
+		cout << "가로 길이를 입력하세요 (1 ~ 20) : ";;
 		cin >> width;
-		if (width < 1 || width > 30)
+		if (width < 1 || width > 20)
 		{
 			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
 			continue;
@@ -335,9 +356,9 @@ void GameManager::AddDrawing()
 
 	while (1)
 	{
-		cout << "세로 길이를 입력하세요 (1 ~ 30) : ";;
+		cout << "세로 길이를 입력하세요 (1 ~ 20) : ";;
 		cin >> height;
-		if (height < 1 || height > 30)
+		if (height < 1 || height > 20)
 		{
 			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
 			continue;
@@ -368,6 +389,7 @@ void GameManager::AddDrawing()
 		if (input == 224) // 방향키일 경우
 			input = _getch();
 
+		int check;
 		switch (input)
 		{
 		case 72: // 위 방향키
@@ -470,10 +492,23 @@ void GameManager::AddDrawing()
 
 			system("cls");
 			boardViewer.Render(playScene.back()->GetPlayerDrawing());
-			if (!autoSolver.CheckUniqueSolution(playScene.back(), drawingList.back()))
+			check = autoSolver.CheckUniqueSolution(playScene.back(), drawingList.back());
+
+			if (check == 0)
+			{
+				cout << "유일성 판단 시간 초과입니다. 해당 그림은 저장되지 않습니다.\n";
+				drawingList.pop_back();
+				playScene.pop_back();
+			}
+			else if (check == 2)
 				cout << "해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
+			else
+				cout << "유일성 판단 성공! 해당 그림은 정상적으로 등록됩니다.\n";
+
+			system("pause");
 			Sleep(2000);
 			return;
+			break;
 		case 27: // Esc키 뒤로가기
 			return;
 			break;
@@ -490,9 +525,9 @@ void GameManager::AddRandomDrawing()
 
 	while (1)
 	{
-		cout << "가로 길이를 입력하세요 (1 ~ 30) : ";;
+		cout << "가로 길이를 입력하세요 (1 ~ 20) : ";;
 		cin >> width;
-		if (width < 1 || width > 30)
+		if (width < 1 || width > 20)
 		{
 			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
 			continue;
@@ -503,9 +538,9 @@ void GameManager::AddRandomDrawing()
 
 	while (1)
 	{
-		cout << "세로 길이를 입력하세요 (1 ~ 30) : ";;
+		cout << "세로 길이를 입력하세요 (1 ~ 20) : ";;
 		cin >> height;
-		if (height < 1 || height > 30)
+		if (height < 1 || height > 20)
 		{
 			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
 			continue;
@@ -520,8 +555,20 @@ void GameManager::AddRandomDrawing()
 
 	system("cls");
 	boardViewer.Render(playScene.back()->GetPlayerDrawing());
-	if (!autoSolver.CheckUniqueSolution(playScene.back(), drawingList.back()))
+	int check = autoSolver.CheckUniqueSolution(playScene.back(), drawingList.back());
+
+	if (check == 0)
+	{
+		cout << "유일성 판단 시간 초과입니다. 해당 그림은 저장되지 않습니다.\n";
+		drawingList.pop_back();
+		playScene.pop_back();
+	}
+	else if (check == 2)
 		cout << "해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
+	else
+		cout << "유일성 판단 성공! 해당 그림은 정상적으로 등록됩니다.\n";
+
+	system("pause");
 	Sleep(2000);
 }
 

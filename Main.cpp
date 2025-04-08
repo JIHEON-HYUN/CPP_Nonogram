@@ -8,8 +8,8 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	GameManager gm;
-	gm.ShowMenu();
+	GameManager::GetGM()->ShowMenu();
+	GameManager::DestroyGM();
 
 	return 0;
 }

@@ -1,8 +1,7 @@
 ﻿  AutoSolver.cpp
-C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(28,16): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(60,16): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(252,14): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(255,52): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(316,14): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(319,52): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(209,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(360,14): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(363,52): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(424,14): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\CPP\Hello\Nonogram\Nonogram\AutoSolver.cpp(427,52): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Nonogram.vcxproj -> C:\CPP\Hello\Nonogram\x64\Debug\Nonogram.exe

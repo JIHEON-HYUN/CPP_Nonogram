@@ -10,14 +10,19 @@ using namespace std;
 class GameManager
 {
 private:
+	static GameManager* gm; // 싱글톤 인스턴스
+
+	GameManager();
+	~GameManager();
+
 	vector<Drawing*> drawingList;
 	vector<PlayScene*> playScene;
 	BoardViewer boardViewer;
 	AutoSolver autoSolver;
 
 public:
-	GameManager();
-	~GameManager();
+	static GameManager* GetGM(); // 싱글톤 인스턴스 접근에 사용
+	static void DestroyGM(); // 싱글톤 인스턴스 메모리 해제
 
 	void ShowMenu();
 	void ShowGameMenu();

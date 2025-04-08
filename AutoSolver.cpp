@@ -2,6 +2,8 @@
 #include <iostream>
 #include <windows.h>
 
+using namespace std::chrono;
+
 AutoSolver::AutoSolver()
 {
 }
@@ -15,6 +17,9 @@ AutoSolver::~AutoSolver()
 
 void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 {
+	// Solution()의 실행 시간 측정 시작
+	start = steady_clock::now();
+
 	// AutoSolver 객체는 하나만 생성하므로, 이전 결과값 초기화시켜줌
 	for (auto solver : solverDrawingList)
 		delete solver;
@@ -22,81 +27,112 @@ void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 
 	Drawing* solverDrawing = new Drawing(*playScene->GetPlayerDrawing());
 
-	// 논리적 추론 (1) : 힌트만으로 row/col이 결정
-	for (int i = 0; i < solverDrawing->GetRowCount(); i++)
-	{
-		vector<int> solRow = solverDrawing->GetRowList()[i];
-		int rowCount = solRow.size() - 1;
+	//// 논리적 추론 (1) : 힌트만으로 row 결정
+	//for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+	//{
+	//	vector<int> solRow = solverDrawing->GetRowList()[i];
+	//	
+	//	// 힌트가 0인 경우
+	//	if (solRow[0] == 0)
+	//	{
+	//		for (int j = 0; j < solverDrawing->GetColCount(); j++)
+	//			solverDrawing->SetValue(i, j, 2);
 
-		for (int j = 0; j < solRow.size(); j++)
-		{
-			rowCount += solRow[j];
-		}
+	//		continue;
+	//	}
 
-		// 힌트만으로 모든 칸을 칠하거나 X표시로 확정지을 수 있을 때
-		if (rowCount == solverDrawing->GetColCount())
-		{
-			int cur = 0;
+	//	int rowCount = solRow.size() - 1;
+	//	for (int j = 0; j < solRow.size(); j++)
+	//	{
+	//		rowCount += solRow[j];
+	//	}
 
-			for (int j = 0; j < solRow.size(); j++)
-			{
-				// 힌트대로 색칠
-				for (int k = 0; k < solRow[j]; k++)
-				{
-					solverDrawing->SetValue(i, cur++, 1);
-				}
+	//	// 힌트만으로 모든 칸을 칠하거나 X표시로 확정지을 수 있을 때
+	//	if (rowCount == solverDrawing->GetColCount())
+	//	{
+	//		int cur = 0;
 
-				// 힌트가 완성되고 마지막 칸이 아니면 X표시
-				if (j != solRow.size() - 1)
-				{
-					solverDrawing->SetValue(i, cur++, 2);
-				}
-			}
-		}
-	}
+	//		for (int j = 0; j < solRow.size(); j++)
+	//		{
+	//			// 힌트대로 색칠
+	//			for (int k = 0; k < solRow[j]; k++)
+	//			{
+	//				solverDrawing->SetValue(i, cur++, 1);
+	//			}
 
-	for (int i = 0; i < solverDrawing->GetColCount(); i++)
-	{
-		vector<int> solcol = solverDrawing->GetColList()[i];
-		int colCount = solcol.size() - 1;
+	//			// 힌트가 완성되고 마지막 칸이 아니면 X표시
+	//			if (j != solRow.size() - 1)
+	//			{
+	//				solverDrawing->SetValue(i, cur++, 2);
+	//			}
+	//		}
+	//	}
+	//}
 
-		for (int j = 0; j < solcol.size(); j++)
-		{
-			colCount += solcol[j];
-		}
+	//// 논리적 추론 (2) : 힌트만으로 col 결정
+	//for (int i = 0; i < solverDrawing->GetColCount(); i++)
+	//{
+	//	vector<int> solCol = solverDrawing->GetColList()[i];
 
-		// 힌트만으로 모든 칸을 칠하거나 X표시로 확정지을 수 있을 때
-		if (colCount == solverDrawing->GetRowCount())
-		{
-			int cur = 0;
+	//	// 힌트가 0인 경우
+	//	if (solCol[0] == 0)
+	//	{
+	//		for (int j = 0; j < solverDrawing->GetRowCount(); j++)
+	//			solverDrawing->SetValue(j, i, 2);
 
-			for (int j = 0; j < solcol.size(); j++)
-			{
-				// 힌트대로 색칠
-				for (int k = 0; k < solcol[j]; k++)
-				{
-					solverDrawing->SetValue(cur++, i, 1);
-				}
+	//		continue;
+	//	}
 
-				// 힌트가 완성되고 마지막 칸이 아니면 X표시
-				if (j != solcol.size() - 1)
-				{
-					solverDrawing->SetValue(cur++, i, 2);
-				}
-			}
-		}
-	}
+	//	int colCount = solCol.size() - 1;
+	//	for (int j = 0; j < solCol.size(); j++)
+	//	{
+	//		colCount += solCol[j];
+	//	}
 
-	// 논리적 추론 (2) : leftSolve, rightSolve가 일치하는 부분으로 결정
+	//	// 힌트만으로 모든 칸을 칠하거나 X표시로 확정지을 수 있을 때
+	//	if (colCount == solverDrawing->GetRowCount())
+	//	{
+	//		int cur = 0;
 
+	//		for (int j = 0; j < solCol.size(); j++)
+	//		{
+	//			// 힌트대로 색칠
+	//			for (int k = 0; k < solCol[j]; k++)
+	//			{
+	//				solverDrawing->SetValue(cur++, i, 1);
+	//			}
+
+	//			// 힌트가 완성되고 마지막 칸이 아니면 X표시
+	//			if (j != solCol.size() - 1)
+	//			{
+	//				solverDrawing->SetValue(cur++, i, 2);
+	//			}
+	//		}
+	//	}
+	//}
+
+	//// 논리적 추론 (3) : leftSolve, rightSolve가 일치하는 부분으로 결정
+	//OverlapSolve(solverDrawing, drawing);
 
 	// 논리적 추론이 끝난 후, 재귀반복을 통해 정답을 찾음
-	FindSolutionDFS(playScene, drawing, solverDrawing, 0, 0);
+	FindSolutionDFS(solverDrawing, drawing, 0, 0);
 }
 
-void AutoSolver::FindSolutionDFS(PlayScene* playScene, Drawing* drawing, Drawing* solverDrawing, int rowIndex, int colIndex)
+void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int rowIndex, int colIndex)
 {
-	// 노노그램 해답 유일성을 보장하기 위해, 복수 정답이 되는 순간 재귀 종료
+	// 실행이 10초가 넘어가면 종료
+	steady_clock::time_point now = steady_clock::now();
+
+	if (duration_cast<seconds>(now - start).count() > 10)
+	{
+		cout << "시간 초과야 임마" << endl;
+		for (auto solver : solverDrawingList)
+			delete solver;
+		solverDrawingList.clear();
+		return;
+	}
+		
+	//// 노노그램 해답 유일성을 보장하기 위해, 복수 정답이 되는 순간 재귀 종료
 	if (solverDrawingList.size() >= 2)
 		return;
 
@@ -106,6 +142,7 @@ void AutoSolver::FindSolutionDFS(PlayScene* playScene, Drawing* drawing, Drawing
 		if (CheckGameOver(solverDrawing, drawing))
 		{
 			Drawing* sol = new Drawing(*solverDrawing);
+			cout << "정답 찾음!" << endl;
 			solverDrawingList.push_back(sol);
 		}
 		
@@ -120,20 +157,20 @@ void AutoSolver::FindSolutionDFS(PlayScene* playScene, Drawing* drawing, Drawing
 	// 현재 위치의 값이 0이 아니면 다음 검사로 넘어감
 	if (solverDrawing->GetValue(rowIndex, colIndex) != 0)
 	{
-		FindSolutionDFS(playScene, drawing, solverDrawing, nextRowIndex, nextColIndex);
+		FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		return;
 	}
 
+	// 현재 위치의 값이 0일 때, 1 or 2의 값을 넣어보면서 재귀
 	for (int i = 1; i <= 2; i++)
 	{
-		// 현재 위치의 값이 0일 때, 1 or 2의 값을 넣어봄
 		solverDrawing->SetValue(rowIndex, colIndex, i);
 		
 		// 현재까지 칠해진 칸이 row힌트와 col힌트에 부합할 경우에만 재귀 진행
 		// 완성이 아직 안되어도 힌트에 어긋난 건 아니므로, completeCheck값을 false로 넘김
 		if (CheckRow(solverDrawing, drawing, rowIndex, false) && CheckCol(solverDrawing, drawing, colIndex, false))
 		{
-			FindSolutionDFS(playScene, drawing, solverDrawing, nextRowIndex, nextColIndex);
+			FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		}
 
 		// 재귀 조건에 들어가지 않으면, 이전 상태로 되돌림
@@ -141,25 +178,95 @@ void AutoSolver::FindSolutionDFS(PlayScene* playScene, Drawing* drawing, Drawing
 	}
 }
 
-vector<pair<int, int>> AutoSolver::LeftSolve(vector<int> line)
+vector<pair<int, int>> AutoSolver::LeftSolve(vector<int> line, int length)
 {
-	return { {0, 0} };
+	vector<pair<int, int>> leftSolution(length, { 0, 0 });
+	int cur = 0;
+
+	// 왼쪽부터 채웠을 때, 칠해지는 칸은 1값과 몇번째 블록인지 인덱스 값을 pair로 저장
+	for (int i = 0; i < line.size(); i++)
+	{
+		for (int j = 0; j < line[i]; j++)
+		{
+			leftSolution[cur].first = 1;
+			leftSolution[cur].second = i;
+			cur++;
+		}
+
+		if (i < line.size() - 1)
+			cur++;
+	}
+
+	return leftSolution;
 }
 
-vector<pair<int, int>> AutoSolver::RightSolve(vector<int> line)
+vector<pair<int, int>> AutoSolver::RightSolve(vector<int> line, int length)
 {
-	return { {0, 0} };
+	vector<pair<int, int>> rightSolution(length, { 0, 0 });
+	int cur = length - 1;
+
+	// 오른쪽부터 채웠을 때, 칠해지는 칸은 1값과 몇번째 블록인지 인덱스 값을 pair로 저장
+	for (int i = line.size() - 1; i >= 0; i--)
+	{
+		for (int j = 0; j < line[i]; j++)
+		{
+			rightSolution[cur].first = 1;
+			rightSolution[cur].second = i;
+			cur--;
+		}
+
+		if (i > 0)
+			cur--;
+	}
+
+	return rightSolution;
 }
 
-bool AutoSolver::CheckUniqueSolution(PlayScene* playScene, Drawing* drawing)
+void AutoSolver::OverlapSolve(Drawing* solverDrawing, Drawing* drawing)
+{
+	// row에서 leftSolve, rightSolve가 일치하는 부분 색칠
+	for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+	{
+		vector<pair<int, int>> leftSolution = LeftSolve(solverDrawing->GetRowList()[i], solverDrawing->GetColCount());
+		vector<pair<int, int>> rightSolution = RightSolve(solverDrawing->GetRowList()[i], solverDrawing->GetColCount());
+
+		for (int j = 0; j < leftSolution.size(); j++)
+		{
+			// 값이 둘 다 1이고, 몇번 째 힌트인지도 일치하면 1값 대입
+			if (leftSolution[j].first == 1 && rightSolution[j].first == 1 && leftSolution[j].second == rightSolution[j].second)
+				solverDrawing->SetValue(i, j, 1);
+		}
+	}
+
+	// col에서 leftSolve, rightSolve가 일치하는 부분 색칠
+	for (int i = 0; i < solverDrawing->GetColCount(); i++)
+	{
+		vector<pair<int, int>> leftSolution = LeftSolve(solverDrawing->GetColList()[i], solverDrawing->GetRowCount());
+		vector<pair<int, int>> rightSolution = RightSolve(solverDrawing->GetColList()[i], solverDrawing->GetRowCount());
+
+		for (int j = 0; j < leftSolution.size(); j++)
+		{
+			// 값이 둘 다 1이고, 몇번 째 힌트인지도 일치하면 1값 대입
+			if (leftSolution[j].first == 1 && rightSolution[j].first == 1 && leftSolution[j].second == rightSolution[j].second)
+				solverDrawing->SetValue(j, i, 1);
+		}
+	}
+}
+
+int AutoSolver::CheckUniqueSolution(PlayScene* playScene, Drawing* drawing)
 {
 	Solution(playScene, drawing);
+	cout << "정답 개수 : " << solverDrawingList.size() << endl;
 
-	// Solution()에서 저장된 solverDrawing이 한 개면 해답이 유일함
-	if (solverDrawingList.size() == 1)
-		return true;
+	// Solution()에서 저장된 solverDrawing이 0개면 시간 초과
+	if (solverDrawingList.size() == 0)
+		return 0;
+	// Solution()에서 저장된 solverDrawing이 1개면 유일 해답
+	else if (solverDrawingList.size() == 1)
+		return 1;
+	// Solution()에서 저장된 solverDrawing이 2개면 복수 정답
 	else
-		return false;
+		return 2;
 }
 
 vector<Drawing*> AutoSolver::GetSolverDrawingList()
@@ -329,14 +436,16 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 void AutoSolver::GetHint(PlayScene* playScene, Drawing* drawing, int hintCount)
 {
 	system("cls");
+	cout << "힌트 솔루션 제공중...\n";
 
 	// CheckUniqueSolution()가 Solution() 호출하면서 solverDrawingList 생성됨
-	if (!CheckUniqueSolution(playScene, drawing))
+	if (CheckUniqueSolution(playScene, drawing) != 1)
 	{
 		cout << "\n해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
 		Sleep(1000);
 		return;
 	}
+
 	// 힌트를 4회 이상 사용하려고 하면 힌트 사용 불가
 	else if (hintCount >= 4)
 	{
