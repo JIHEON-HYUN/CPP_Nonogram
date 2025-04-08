@@ -1,5 +1,6 @@
 #include "AutoSolver.h"
 #include <iostream>
+#include <windows.h>
 
 AutoSolver::AutoSolver()
 {
@@ -154,7 +155,7 @@ bool AutoSolver::CheckUniqueSolution(PlayScene* playScene, Drawing* drawing)
 {
 	Solution(playScene, drawing);
 
-	// Solution(playScene, drawing)에서 저장된 solverDrawing이 한 개면 해답이 유일함
+	// Solution()에서 저장된 solverDrawing이 한 개면 해답이 유일함
 	if (solverDrawingList.size() == 1)
 		return true;
 	else
@@ -328,14 +329,41 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 void AutoSolver::GetHint(PlayScene* playScene, Drawing* drawing, int hintCount)
 {
 	system("cls");
-	cout << "힌트 솔루션 제공중...\n\n";
 
+	// CheckUniqueSolution()가 Solution() 호출하면서 solverDrawingList 생성됨
 	if (!CheckUniqueSolution(playScene, drawing))
 	{
-		cout << "해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
+		cout << "\n해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
+		Sleep(1000);
 		return;
 	}
-	
-	
+	// 힌트를 4회 이상 사용하려고 하면 힌트 사용 불가
+	else if (hintCount >= 4)
+	{
+		cout << "\n힌트 사용 불가!\n";
+		Sleep(1000);
+		return;
+	}
 
+	vector<pair<int, int>> hintList;
+
+	for (int i = 0; i < playScene->GetPlayerDrawing()->GetRowCount(); i++)
+	{
+		for (int j = 0; j < playScene->GetPlayerDrawing()->GetColCount(); j++)
+		{
+			// player와 drawing의 색칠 값이 다른 인덱스 저장
+			if (playScene->GetPlayerDrawing()->GetValue(i, j) != drawing->GetValue(i, j))
+				hintList.push_back({ i, j });
+		}
+	}
+
+	pair<int, int> hint = hintList[rand() % hintList.size()];
+
+	if (drawing->GetValue(hint.first, hint.second) == 1)
+		playScene->GetPlayerDrawing()->SetValue(hint.first, hint.second, 1); // 색칠 칸일 경우
+	else
+		playScene->GetPlayerDrawing()->SetValue(hint.first, hint.second, 2); // X표시일 경우
+
+	cout << "\n힌트 사용 완료!\n";
+	Sleep(1000);
 }
