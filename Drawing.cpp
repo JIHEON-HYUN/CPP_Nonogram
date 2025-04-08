@@ -136,13 +136,13 @@ Drawing::Drawing(int width, int height)
 	}
 }
 
-Drawing::Drawing(const Drawing& drawing)
+Drawing::Drawing(const Drawing& otherDrawing)
 {
-	this->drawing = drawing.drawing;
-	this->rowList = drawing.rowList;
-	this->colList = drawing.colList;
-	this->curX = drawing.curX;
-	this->curY = drawing.curY;
+	this->drawing = otherDrawing.drawing;
+	this->rowList = otherDrawing.rowList;
+	this->colList = otherDrawing.colList;
+	this->curX = otherDrawing.curX;
+	this->curY = otherDrawing.curY;
 }
 
 Drawing::~Drawing()

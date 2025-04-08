@@ -25,16 +25,13 @@ public:
 
 	// 그림이 완성됐는지 확인
 	bool CheckGameOver(Drawing* solverDrawing, Drawing* drawing);
-	bool CheckRow(Drawing* solverDrawing, Drawing* drawing, int index);
-	bool CheckCol(Drawing* solverDrawing, Drawing* drawing, int index);
+	bool CheckRow(Drawing* solverDrawing, Drawing* drawing, int rowIndex, bool completeCheck);
+	bool CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex, bool completeCheck);
 
 	// 정답 목록 return
 	vector<Drawing*> GetSolverDrawingList();
 
 	// 플레이어 현재 상황을 넘겨받고 남은 칸 중 색칠 가능한 부분을 찾아 칠해줌
 	void GetHint(PlayScene* playScene, Drawing* drawing);
-
-	bool IsRowValid(Drawing* solverDrawing, Drawing* hints, int rowIndex);
-	bool IsColValid(Drawing* solverDrawing, Drawing* hints, int colIndex);
 };
 
