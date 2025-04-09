@@ -1,4 +1,5 @@
 #include "PlayScene.h"
+#include "GameManager.h"
 #include <iostream>
 #include <conio.h>
 
@@ -18,12 +19,13 @@ Drawing* PlayScene::GetPlayerDrawing()
 	return playerDrawing;
 }
 
-bool PlayScene::PlayerDraw()
+int PlayScene::PlayerDraw()
 {
 	cout << "\n\n 이동 : 화살표";
 	cout << "\n 색칠하기 : z";
 	cout << "\n X표시 : x";
-	cout << "\n 초기화 : i (주의! 진행상황 다 날라감)";
+	cout << "\n 초기화 : i (주의! 진행상황이 즉시 초기화됨)";
+	cout << "\n 힌트 : h (최대 3회)";
 	cout << "\n 뒤로가기 : Esc\n";
 
 	char input;
@@ -63,15 +65,19 @@ bool PlayScene::PlayerDraw()
 		break;
 	case 'i': // 진행 상황 초기화
 		Init();
+		return 3;
+		break;
+	case 'h': // 힌트
+		return 2;
 		break;
 	case 27: // Esc키 뒤로가기
-		return false;
+		return 0;
 		break;
 	default:
 		break;
 	}
 
-	return true;
+	return 1;
 }
 
 void PlayScene::Init()

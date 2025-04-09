@@ -1,9 +1,7 @@
 #include "AutoSolver.h"
+#include "GameManager.h"
 #include <iostream>
 #include <windows.h>
-#include "GameManager.h"
-
-using namespace std::chrono;
 
 AutoSolver::AutoSolver()
 {
@@ -27,6 +25,13 @@ void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 	solverDrawingList.clear();
 
 	Drawing* solverDrawing = new Drawing(*playScene->GetPlayerDrawing());
+	for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+	{
+		for (int j = 0; j < solverDrawing->GetColCount(); j++)
+		{
+			solverDrawing->SetValue(i, j, 0);
+		}
+	}
 
 	//// 논리적 추론 (1) : 힌트만으로 row 결정
 	//for (int i = 0; i < solverDrawing->GetRowCount(); i++)
@@ -121,15 +126,15 @@ void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 
 void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int rowIndex, int colIndex)
 {
-	//// 실행이 10초가 넘어가면 종료
-	//steady_clock::time_point solNow = steady_clock::now();
-	//if (duration_cast<seconds>(solNow - solStart).count() > 10)
-	//{
-	//	for (auto solver : solverDrawingList)
-	//		delete solver;
-	//	solverDrawingList.clear();
-	//	return;
-	//}
+	// 실행이 30초가 넘어가면 종료
+	steady_clock::time_point solNow = steady_clock::now();
+	if (duration_cast<seconds>(solNow - solStart).count() > 30)
+	{
+		for (auto solver : solverDrawingList)
+			delete solver;
+		solverDrawingList.clear();
+		return;
+	}
 		
 	//// 노노그램 해답 유일성을 보장하기 위해, 복수 정답이 되는 순간 재귀 종료
 	if (solverDrawingList.size() >= 2)
@@ -141,7 +146,6 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 		if (CheckGameOver(solverDrawing, drawing))
 		{
 			Drawing* sol = new Drawing(*solverDrawing);
-			cout << "정답 찾음!\n";
 			solverDrawingList.push_back(sol);
 		}
 		
@@ -156,8 +160,7 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 	// 현재 위치의 값이 0이 아니면 다음 검사로 넘어감
 	if (solverDrawing->GetValue(rowIndex, colIndex) != 0)
 	{
-		GameManager::GetGM()->boardViewer.Render(solverDrawing);
-		//system("pause");
+		//GameManager::GetGM()->boardViewer.Render(solverDrawing);
 		FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		return;
 	}
@@ -171,14 +174,12 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 		// 완성이 아직 안되어도 힌트에 어긋난 건 아니므로, completeCheck값을 false로 넘김
 		if (CheckRow(solverDrawing, drawing, rowIndex, false) && CheckCol(solverDrawing, drawing, colIndex, false))
 		{
-			GameManager::GetGM()->boardViewer.Render(solverDrawing);
-			//system("pause");
+			//GameManager::GetGM()->boardViewer.Render(solverDrawing);
 			FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		}
 
 		// 재귀 조건에 들어가지 않으면, 이전 상태로 되돌림
-		GameManager::GetGM()->boardViewer.Render(solverDrawing);
-		//system("pause");
+		//GameManager::GetGM()->boardViewer.Render(solverDrawing);
 		solverDrawing->SetValue(rowIndex, colIndex, 0);
 	}
 }
@@ -451,7 +452,15 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 
 void AutoSolver::GetHint(PlayScene* playScene, Drawing* drawing, int hintCount)
 {
-	system("cls");
+	// 힌트 잔여 횟수가 0이면 사용 불가
+	if (hintCount <= 0)
+	{
+		cout << "\n힌트 사용 불가!\n";
+		Sleep(1000);
+		system("cls");
+		return;
+	}
+
 	cout << "힌트 솔루션 제공중...\n";
 
 	// CheckUniqueSolution()가 Solution() 호출하면서 solverDrawingList 생성됨
@@ -459,14 +468,7 @@ void AutoSolver::GetHint(PlayScene* playScene, Drawing* drawing, int hintCount)
 	{
 		cout << "\n해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
 		Sleep(1000);
-		return;
-	}
-
-	// 힌트를 4회 이상 사용하려고 하면 힌트 사용 불가
-	else if (hintCount >= 4)
-	{
-		cout << "\n힌트 사용 불가!\n";
-		Sleep(1000);
+		system("cls");
 		return;
 	}
 
@@ -477,7 +479,7 @@ void AutoSolver::GetHint(PlayScene* playScene, Drawing* drawing, int hintCount)
 		for (int j = 0; j < playScene->GetPlayerDrawing()->GetColCount(); j++)
 		{
 			// player와 drawing의 색칠 값이 다른 인덱스 저장
-			if (playScene->GetPlayerDrawing()->GetValue(i, j) != drawing->GetValue(i, j))
+			if (!((playScene->GetPlayerDrawing()->GetValue(i, j) == 2 && drawing->GetValue(i, j) == 0) || (playScene->GetPlayerDrawing()->GetValue(i, j) == drawing->GetValue(i, j))))
 				hintList.push_back({ i, j });
 		}
 	}
@@ -491,4 +493,5 @@ void AutoSolver::GetHint(PlayScene* playScene, Drawing* drawing, int hintCount)
 
 	cout << "\n힌트 사용 완료!\n";
 	Sleep(1000);
+	system("cls");
 }

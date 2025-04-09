@@ -8,94 +8,115 @@ GameManager* GameManager::gm = nullptr;
 
 GameManager::GameManager()
 {
-	// GameManager 생성될 때, 사전에 그림 목록 저장
-	vector<vector<int>> exam1 =
-	{
-		{0,0,0,0,1,0,0,0,0,0},
-		{0,0,0,1,1,1,0,0,0,0},
-		{0,0,1,0,1,1,0,0,0,0},
-		{0,1,0,0,1,1,1,0,0,0},
-		{0,1,0,0,1,1,1,0,0,0},
-		{0,1,1,0,1,1,1,1,0,0},
-		{0,0,1,1,1,1,1,1,0,0},
-		{0,0,0,0,1,0,0,0,0,0},
-		{1,1,1,1,1,1,1,1,1,1},
-		{0,1,1,1,1,1,1,1,1,0}
-	};
+	//// GameManager 생성될 때, 사전에 그림 목록 저장
+	//vector<vector<int>> exam =
+	//{
+	//	{0,0,0,0,1,0,0,0,0,0},
+	//	{0,0,0,1,1,1,0,0,0,0},
+	//	{0,0,1,0,1,1,0,0,0,0},
+	//	{0,1,0,0,1,1,1,0,0,0},
+	//	{0,1,0,0,1,1,1,0,0,0},
+	//	{0,1,1,0,1,1,1,1,0,0},
+	//	{0,0,1,1,1,1,1,1,0,0},
+	//	{0,0,0,0,1,0,0,0,0,0},
+	//	{1,1,1,1,1,1,1,1,1,1},
+	//	{0,1,1,1,1,1,1,1,1,0}
+	//};
 
-	vector<vector<int>> exam2 =
-	{
-		{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		{0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-		{0,0,0,1,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1},
-		{0,0,1,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1},
-		{0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1},
-		{0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1},
-		{1,1,1,1,0,0,1,1,1,1,1,0,0,0,1,1,0,0,1,1,1},
-		{1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1},
-		{1,1,0,1,0,0,1,0,1,1,1,1,1,1,0,1,0,0,1,0,1},
-		{0,1,0,1,0,1,1,0,1,1,1,1,1,1,0,1,0,1,1,0,1},
-		{0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0}
-	};
+	//vector<vector<int>> exam1 =
+	//{
+	//	{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	//	{0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	//	{0,0,0,1,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1},
+	//	{0,0,1,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1},
+	//	{0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1},
+	//	{0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1},
+	//	{1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1},
+	//	{1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1},
+	//	{1,1,1,1,0,0,1,1,1,1,1,0,0,0,1,1,0,0,1,1,1},
+	//	{1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1},
+	//	{1,1,0,1,0,0,1,0,1,1,1,1,1,1,0,1,0,0,1,0,1},
+	//	{0,1,0,1,0,1,1,0,1,1,1,1,1,1,0,1,0,1,1,0,1},
+	//	{0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0}
+	//};
 
-	vector<vector<int>> exam3 =
-	{
-		{0,0,0,0,0,1,0,0,0,0},
-		{0,0,1,0,1,0,1,0,1,0},
-		{0,1,0,1,0,1,0,1,0,1},
-		{0,1,1,1,0,0,0,1,1,1},
-		{0,0,1,0,1,1,1,1,1,0},
-		{0,0,1,1,1,1,1,1,1,0},
-		{0,0,0,1,1,1,1,1,0,0},
-		{0,0,0,0,1,1,1,0,0,0},
-		{1,1,0,0,1,1,1,0,0,0},
-		{1,1,1,0,0,1,0,0,0,1},
-		{0,1,1,1,0,1,0,0,1,1},
-		{0,0,0,0,1,1,0,1,1,1},
-		{0,0,0,0,0,1,1,1,1,0},
-		{0,0,0,0,0,1,0,0,0,0},
-		{0,0,0,0,0,1,0,0,0,0}
-	};
+	//vector<vector<int>> exam2 =
+	//{
+	//	{0,0,0,0,0,1,0,0,0,0},
+	//	{0,0,1,0,1,0,1,0,1,0},
+	//	{0,1,0,1,0,1,0,1,0,1},
+	//	{0,1,1,1,0,0,0,1,1,1},
+	//	{0,0,1,0,1,1,1,1,1,0},
+	//	{0,0,1,1,1,1,1,1,1,0},
+	//	{0,0,0,1,1,1,1,1,0,0},
+	//	{0,0,0,0,1,1,1,0,0,0},
+	//	{1,1,0,0,1,1,1,0,0,0},
+	//	{1,1,1,0,0,1,0,0,0,1},
+	//	{0,1,1,1,0,1,0,0,1,1},
+	//	{0,0,0,0,1,1,0,1,1,1},
+	//	{0,0,0,0,0,1,1,1,1,0},
+	//	{0,0,0,0,0,1,0,0,0,0},
+	//	{0,0,0,0,0,1,0,0,0,0}
+	//};
 
-	vector<vector<int>> exam4 =
-	{
-		{0,0,1,1,1,1,1,1,1,1},
-		{1,1,1,1,1,1,1,1,1,1},
-		{1,0,1,1,1,1,1,1,1,1},
-		{0,1,1,1,1,1,1,1,1,0},
-		{0,0,0,0,1,1,1,1,0,0}
-	};
+	//vector<vector<int>> exam3 =
+	//{
+	//	{0,0,1,1,1,1,1,1,1,1},
+	//	{1,1,1,1,1,1,1,1,1,1},
+	//	{1,0,1,1,1,1,1,1,1,1},
+	//	{0,1,1,1,1,1,1,1,1,0},
+	//	{0,0,0,0,1,1,1,1,0,0}
+	//};
 
-	vector<vector<int>> exam5 =
-	{
-		{1,1,1},
-		{1,1,1},
-		{1,1,0}
-	};
+	//vector<vector<int>> exam4 =
+	//{
+	//	{1,1,1},
+	//	{1,1,1},
+	//	{1,1,0}
+	//};
 
-	vector<vector<int>> exam6 =
-	{
-		{1,1,1},
-		{0,0,0},
-		{1,1,0}
-	};
+	//vector<vector<int>> exam5 =
+	//{
+	//	{1,1,1},
+	//	{0,0,0},
+	//	{1,1,0}
+	//};
 
-	drawingList.push_back(new Drawing(exam1));
-	playScene.push_back(new PlayScene(drawingList[0]));
-	drawingList.push_back(new Drawing(exam2));
-	playScene.push_back(new PlayScene(drawingList[1]));
-	drawingList.push_back(new Drawing(exam3));
-	playScene.push_back(new PlayScene(drawingList[2]));
-	drawingList.push_back(new Drawing(exam4));
-	playScene.push_back(new PlayScene(drawingList[3]));
-	drawingList.push_back(new Drawing(exam5));
-	playScene.push_back(new PlayScene(drawingList[4]));
-	drawingList.push_back(new Drawing(exam6));
-	playScene.push_back(new PlayScene(drawingList[5]));
+	//vector<vector<int>> exam6 =
+	//{
+	//	{1,1,1,0,0,0,1,1,1,1},
+	//	{1,0,1,1,1,1,0,0,1,1},
+	//	{0,0,1,1,0,1,1,1,0,1},
+	//	{0,1,0,1,1,1,1,0,0,0},
+	//	{0,1,0,0,0,1,1,0,1,1},
+	//	{1,1,1,0,0,1,0,0,1,0},
+	//	{0,1,0,1,0,0,0,1,0,0},
+	//	{0,0,0,0,0,0,1,0,0,0},
+	//	{1,1,0,1,1,1,1,1,1,1},
+	//	{0,1,0,1,1,1,1,1,1,1}
+	//};
 
-
+	//drawingList.push_back(new Drawing(exam));
+	//playScene.push_back(new PlayScene(drawingList[0]));
+	//hintCountList.push_back(3);
+	//drawingList.push_back(new Drawing(exam1));
+	//playScene.push_back(new PlayScene(drawingList[1]));
+	//hintCountList.push_back(3);
+	//drawingList.push_back(new Drawing(exam2));
+	//playScene.push_back(new PlayScene(drawingList[2]));
+	//hintCountList.push_back(3);
+	//drawingList.push_back(new Drawing(exam3));
+	//playScene.push_back(new PlayScene(drawingList[3]));
+	//hintCountList.push_back(3);
+	//drawingList.push_back(new Drawing(exam4));
+	//playScene.push_back(new PlayScene(drawingList[4]));
+	//hintCountList.push_back(3);
+	//drawingList.push_back(new Drawing(exam5));
+	//playScene.push_back(new PlayScene(drawingList[5]));
+	//hintCountList.push_back(3);
+	//drawingList.push_back(new Drawing(exam6));
+	//playScene.push_back(new PlayScene(drawingList[6]));
+	//hintCountList.push_back(3);
 }
 
 GameManager::~GameManager()
@@ -205,6 +226,13 @@ void GameManager::ShowGameMenu()
 	{
 		system("cls");
 
+		if (drawingList.empty())
+		{
+			cout << "저장된 그림이 없습니다.\n";
+			Sleep(1000);
+			return;
+		}
+
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());
 		cout << "그림이동 : 좌/우 화살표\n";
 		cout << "선택 : z\n";
@@ -309,7 +337,7 @@ void GameManager::ShowEditMenu()
 void GameManager::GameStart(int index)
 {
 	// PlayerDraw()에서 뒤로가기를 눌렀는지 확인하는 변수
-	bool checkContinue = false;
+	int checkContinue = 0;
 
 	// 플레이어가 그린 그림이 정답일 때까지 반복
 	while (!autoSolver.CheckGameOver(playScene[index]->GetPlayerDrawing(), drawingList[index]))
@@ -317,13 +345,20 @@ void GameManager::GameStart(int index)
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());
 		checkContinue = playScene[index]->PlayerDraw();
 
-		if (!checkContinue)
-			break; // PlayerDraw()에서 뒤로가기를 누르면 즉시 반복 탈출
+		if (checkContinue == 0) // PlayerDraw()에서 뒤로가기 눌렀을 때
+			break; 
+		else if (checkContinue == 2) // PlayerDraw()에서 힌트 사용을 눌렀을 때
+		{
+			autoSolver.GetHint(playScene[index], drawingList[index], hintCountList[index]);
+			hintCountList[index]--;
+		}
+		else if (checkContinue == 3) // PlayerDraw()에서 초기화를 눌렀을 때
+			hintCountList[index] = 3; // 힌트 사용 횟수 초기화
 	}
 
 	// 그림이 완성되면 현재 커서위치를 그림 격자 밖으로 빼서 완성본을 출력
 	// PlayerDraw()에서 뒤로가기를 누르면 false가 반환되어 조건문 안 코드는 실행 X 
-	if (checkContinue)
+	if (checkContinue != 0)
 	{
 		system("cls");
 		playScene[index]->GetPlayerDrawing()->SetCurX(playScene[index]->GetPlayerDrawing()->GetColCount());
@@ -333,6 +368,7 @@ void GameManager::GameStart(int index)
 
 		// 완성 메세지 이후 해당 그림 초기화
 		playScene[index]->Init();
+		hintCountList[index] = 3;
 	}
 }
 
@@ -343,9 +379,9 @@ void GameManager::AddDrawing()
 
 	while (1)
 	{
-		cout << "가로 길이를 입력하세요 (1 ~ 20) : ";;
+		cout << "가로 길이를 입력하세요 (1 ~ 10) : ";;
 		cin >> width;
-		if (width < 1 || width > 20)
+		if (width < 1 || width > 10)
 		{
 			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
 			continue;
@@ -356,9 +392,9 @@ void GameManager::AddDrawing()
 
 	while (1)
 	{
-		cout << "세로 길이를 입력하세요 (1 ~ 20) : ";;
+		cout << "세로 길이를 입력하세요 (1 ~ 10) : ";;
 		cin >> height;
-		if (height < 1 || height > 20)
+		if (height < 1 || height > 10)
 		{
 			cout << "잘못된 입력입니다. 다시 입력하세요 \n\n";
 			continue;
@@ -489,6 +525,7 @@ void GameManager::AddDrawing()
 		case 'q': // 현재 그림 저장
 			drawingList.push_back(newDrawing);
 			playScene.push_back(new PlayScene(newDrawing));
+			hintCountList.push_back(3);
 
 			system("cls");
 			boardViewer.Render(playScene.back()->GetPlayerDrawing());
@@ -496,9 +533,11 @@ void GameManager::AddDrawing()
 
 			if (check == 0)
 			{
-				cout << "유일성 판단 시간 초과입니다. 해당 그림은 저장되지 않습니다.\n";
+				cout << "유일성 판단 시간 초과입니다.\n";
+				cout << "복수 정답일 확률이 매우 높아, 해당 그림은 저장되지 않습니다.\n";
 				drawingList.pop_back();
 				playScene.pop_back();
+				hintCountList.pop_back();
 			}
 			else if (check == 2)
 				cout << "해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
@@ -522,7 +561,7 @@ void GameManager::AddRandomDrawing()
 
 	while (1)
 	{
-		cout << "가로 길이를 입력하세요 (1 ~ 20) : ";;
+		cout << "가로 길이를 입력하세요 (1 ~ 10) : ";;
 		cin >> width;
 		if (width < 1 || width > 20)
 		{
@@ -535,7 +574,7 @@ void GameManager::AddRandomDrawing()
 
 	while (1)
 	{
-		cout << "세로 길이를 입력하세요 (1 ~ 20) : ";;
+		cout << "세로 길이를 입력하세요 (1 ~ 10) : ";;
 		cin >> height;
 		if (height < 1 || height > 20)
 		{
@@ -547,21 +586,9 @@ void GameManager::AddRandomDrawing()
 	}
 
 	Drawing* newDrawing = new Drawing(width,height);
-	/*vector<vector<int>> hi = {
-		{1,1,1,0,0,0,1,1,1,1},
-		{1,0,1,1,1,1,0,0,1,1},
-		{0,0,1,1,0,1,1,1,0,1},
-		{0,1,0,1,1,1,1,0,0,0},
-		{0,1,0,0,0,1,1,0,1,1},
-		{1,1,1,0,0,1,0,0,1,0},
-		{0,1,0,1,0,0,0,1,0,0},
-		{0,0,0,0,0,0,1,0,0,0},
-		{1,1,0,1,1,1,1,1,1,1},
-		{0,1,0,1,1,1,1,1,1,1}
-	};
-	Drawing* newDrawing = new Drawing(hi);*/
 	drawingList.push_back(newDrawing);
 	playScene.push_back(new PlayScene(newDrawing));
+	hintCountList.push_back(3);
 
 	system("cls");
 	boardViewer.Render(playScene.back()->GetPlayerDrawing());
@@ -569,9 +596,11 @@ void GameManager::AddRandomDrawing()
 
 	if (check == 0)
 	{
-		cout << "유일성 판단 시간 초과입니다. 해당 그림은 저장되지 않습니다.\n";
+		cout << "유일성 판단 시간 초과입니다.\n";
+		cout << "복수 정답일 확률이 매우 높아, 해당 그림은 저장되지 않습니다.\n";
 		drawingList.pop_back();
 		playScene.pop_back();
+		hintCountList.pop_back();
 	}
 	else if (check == 2)
 		cout << "해답이 유일하지 않습니다. 해당 그림은 힌트 기능이 제한됩니다.\n";
@@ -589,11 +618,12 @@ void GameManager::RemoveDrawing()
 	while (1)
 	{
 		system("cls");
+
 		if (drawingList.empty())
 		{
 			cout << "지울 그림이 없습니다!\n";
-			Sleep(2000);
-			break;
+			Sleep(1000);
+			return;
 		}
 
 		boardViewer.Render(playScene[index]->GetPlayerDrawing());

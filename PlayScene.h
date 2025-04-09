@@ -20,7 +20,7 @@ public:
 
 	Drawing* GetPlayerDrawing();
 
-	bool PlayerDraw(); // 게임 지속여부를 확인하기 위해 bool값을 return
+	int PlayerDraw(); // 게임 지속여부를 확인하기 위해 bool값을 return
 	void Init();
 };
 
