@@ -278,9 +278,7 @@ bool AutoSolver::CheckGameOver(Drawing* solverDrawing, Drawing* drawing)
 {
 	// 총 칠해진 칸 수가 다르면 검사 돌리지않고 바로 false 반환
 	if (solverDrawing->GetAllSum() != drawing->GetAllSum())
-	{
 		return false;
-	}
 	else
 	{
 		auto sol = solverDrawing;
@@ -319,7 +317,7 @@ bool AutoSolver::CheckRow(Drawing* solverDrawing, Drawing* drawing, int rowIndex
 
 		if (solValue == 1) 
 			count++;
-		else if (count > 0)
+		else
 		{
 			solRow.push_back(count);
 			count = 0;
@@ -383,7 +381,7 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 
 		if (solValue == 1)
 			count++;
-		else if (count > 0)
+		else
 		{
 			solCol.push_back(count);
 			count = 0;

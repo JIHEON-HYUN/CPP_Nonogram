@@ -505,7 +505,6 @@ void GameManager::AddDrawing()
 			else
 				cout << "유일성 판단 성공! 해당 그림은 정상적으로 등록됩니다.\n";
 
-			system("pause");
 			Sleep(2000);
 			return;
 			break;
@@ -568,7 +567,6 @@ void GameManager::AddRandomDrawing()
 	else
 		cout << "유일성 판단 성공! 해당 그림은 정상적으로 등록됩니다.\n";
 
-	system("pause");
 	Sleep(2000);
 }
 
