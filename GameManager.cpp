@@ -505,12 +505,10 @@ void GameManager::AddDrawing()
 			else
 				cout << "유일성 판단 성공! 해당 그림은 정상적으로 등록됩니다.\n";
 
-			Sleep(2000);
+			system("pause");
 			return;
-			break;
 		case 27: // Esc키 뒤로가기
 			return;
-			break;
 		default:
 			break;
 		}
@@ -549,6 +547,19 @@ void GameManager::AddRandomDrawing()
 	}
 
 	Drawing* newDrawing = new Drawing(width,height);
+	/*vector<vector<int>> hi = {
+		{1,1,1,0,0,0,1,1,1,1},
+		{1,0,1,1,1,1,0,0,1,1},
+		{0,0,1,1,0,1,1,1,0,1},
+		{0,1,0,1,1,1,1,0,0,0},
+		{0,1,0,0,0,1,1,0,1,1},
+		{1,1,1,0,0,1,0,0,1,0},
+		{0,1,0,1,0,0,0,1,0,0},
+		{0,0,0,0,0,0,1,0,0,0},
+		{1,1,0,1,1,1,1,1,1,1},
+		{0,1,0,1,1,1,1,1,1,1}
+	};
+	Drawing* newDrawing = new Drawing(hi);*/
 	drawingList.push_back(newDrawing);
 	playScene.push_back(new PlayScene(newDrawing));
 
@@ -567,7 +578,7 @@ void GameManager::AddRandomDrawing()
 	else
 		cout << "유일성 판단 성공! 해당 그림은 정상적으로 등록됩니다.\n";
 
-	Sleep(2000);
+	system("pause");
 }
 
 void GameManager::RemoveDrawing()

@@ -17,10 +17,11 @@ private:
 
 	vector<Drawing*> drawingList;
 	vector<PlayScene*> playScene;
-	BoardViewer boardViewer;
+	
 	AutoSolver autoSolver;
 
 public:
+	BoardViewer boardViewer;
 	static GameManager* GetGM(); // 싱글톤 인스턴스 접근에 사용
 	static void DestroyGM(); // 싱글톤 인스턴스 메모리 해제
 

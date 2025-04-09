@@ -11,7 +11,7 @@ class AutoSolver
 {
 private:
 	vector<Drawing*> solverDrawingList;
-	steady_clock::time_point start;
+	steady_clock::time_point solStart;
 
 public:
 	AutoSolver();

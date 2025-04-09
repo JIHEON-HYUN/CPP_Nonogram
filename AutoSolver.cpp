@@ -1,6 +1,7 @@
 #include "AutoSolver.h"
 #include <iostream>
 #include <windows.h>
+#include "GameManager.h"
 
 using namespace std::chrono;
 
@@ -18,7 +19,7 @@ AutoSolver::~AutoSolver()
 void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 {
 	// Solution()의 실행 시간 측정 시작
-	start = steady_clock::now();
+	solStart = steady_clock::now();
 
 	// AutoSolver 객체는 하나만 생성하므로, 이전 결과값 초기화시켜줌
 	for (auto solver : solverDrawingList)
@@ -120,17 +121,15 @@ void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 
 void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int rowIndex, int colIndex)
 {
-	// 실행이 10초가 넘어가면 종료
-	steady_clock::time_point now = steady_clock::now();
-
-	if (duration_cast<seconds>(now - start).count() > 10)
-	{
-		cout << "시간 초과야 임마" << endl;
-		for (auto solver : solverDrawingList)
-			delete solver;
-		solverDrawingList.clear();
-		return;
-	}
+	//// 실행이 10초가 넘어가면 종료
+	//steady_clock::time_point solNow = steady_clock::now();
+	//if (duration_cast<seconds>(solNow - solStart).count() > 10)
+	//{
+	//	for (auto solver : solverDrawingList)
+	//		delete solver;
+	//	solverDrawingList.clear();
+	//	return;
+	//}
 		
 	//// 노노그램 해답 유일성을 보장하기 위해, 복수 정답이 되는 순간 재귀 종료
 	if (solverDrawingList.size() >= 2)
@@ -142,7 +141,7 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 		if (CheckGameOver(solverDrawing, drawing))
 		{
 			Drawing* sol = new Drawing(*solverDrawing);
-			cout << "정답 찾음!" << endl;
+			cout << "정답 찾음!\n";
 			solverDrawingList.push_back(sol);
 		}
 		
@@ -157,6 +156,8 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 	// 현재 위치의 값이 0이 아니면 다음 검사로 넘어감
 	if (solverDrawing->GetValue(rowIndex, colIndex) != 0)
 	{
+		GameManager::GetGM()->boardViewer.Render(solverDrawing);
+		//system("pause");
 		FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		return;
 	}
@@ -170,10 +171,14 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 		// 완성이 아직 안되어도 힌트에 어긋난 건 아니므로, completeCheck값을 false로 넘김
 		if (CheckRow(solverDrawing, drawing, rowIndex, false) && CheckCol(solverDrawing, drawing, colIndex, false))
 		{
+			GameManager::GetGM()->boardViewer.Render(solverDrawing);
+			//system("pause");
 			FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		}
 
 		// 재귀 조건에 들어가지 않으면, 이전 상태로 되돌림
+		GameManager::GetGM()->boardViewer.Render(solverDrawing);
+		//system("pause");
 		solverDrawing->SetValue(rowIndex, colIndex, 0);
 	}
 }
@@ -256,7 +261,6 @@ void AutoSolver::OverlapSolve(Drawing* solverDrawing, Drawing* drawing)
 int AutoSolver::CheckUniqueSolution(PlayScene* playScene, Drawing* drawing)
 {
 	Solution(playScene, drawing);
-	cout << "정답 개수 : " << solverDrawingList.size() << endl;
 
 	// Solution()에서 저장된 solverDrawing이 0개면 시간 초과
 	if (solverDrawingList.size() == 0)
@@ -319,8 +323,11 @@ bool AutoSolver::CheckRow(Drawing* solverDrawing, Drawing* drawing, int rowIndex
 			count++;
 		else
 		{
-			solRow.push_back(count);
-			count = 0;
+			if (count > 0)
+			{
+				solRow.push_back(count);
+				count = 0;
+			}
 		}
 	}
 
@@ -330,7 +337,8 @@ bool AutoSolver::CheckRow(Drawing* solverDrawing, Drawing* drawing, int rowIndex
 	// 완성 검사인지 확인 (true면 완성 검사, false면 현재까지 만들어진 줄이 힌트에 어긋나는지 확인)
 	if (completeCheck)
 	{
-		if (solRow.empty()) solRow.push_back(0);
+		if (solRow.empty()) 
+			solRow.push_back(0);
 		return solRow == answerRow;
 	}
 	else
@@ -345,25 +353,28 @@ bool AutoSolver::CheckRow(Drawing* solverDrawing, Drawing* drawing, int rowIndex
 				return false;
 		}
 
-		// 남은 칸 수 세기
-		int remain = 0;
-		for (int i = 0; i < sol->GetColCount(); i++)
+		if (solRow.size() <= answerRow.size())
 		{
-			if (solverDrawing->GetValue(rowIndex, i) == 0)
-				remain++;
+			// 남은 칸 수 세기
+			int remain = 0;
+			for (int i = 0; i < sol->GetColCount(); i++)
+			{
+				if (solverDrawing->GetValue(rowIndex, i) == 0)
+					remain++;
+			}
+
+			// sol의 남은 칸 수가 answer를 채우기 위한 칸 수보다 적으면 false 반환
+			int totalRemain = 0;
+			for (int i = solRow.size(); i < answerRow.size(); i++)
+				totalRemain += answerRow[i];
+
+			totalRemain += (answerRow.size() - solRow.size() - 1);
+
+			if (remain < totalRemain)
+				return false;
+
+			return true;
 		}
-
-		// sol의 남은 칸 수가 answer를 채우기 위한 칸 수보다 적으면 false 반환
-		int totalRemain = 0;
-		for (int i = solRow.size(); i < answerRow.size(); i++)
-			totalRemain += answerRow[i];
-
-		totalRemain += (answerRow.size() - solRow.size() - 1);
-
-		if (remain < totalRemain)
-			return false;
-
-		return true;
 	}
 }
 
@@ -383,8 +394,11 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 			count++;
 		else
 		{
-			solCol.push_back(count);
-			count = 0;
+			if (count > 0)
+			{
+				solCol.push_back(count);
+				count = 0;
+			}
 		}
 	}
 
@@ -394,7 +408,8 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 	// 완성 검사인지 확인 (true면 완성 검사, false면 현재까지 만들어진 줄이 힌트에 어긋나는지 확인)
 	if (completeCheck)
 	{
-		if (solCol.empty()) solCol.push_back(0);
+		if (solCol.empty()) 
+			solCol.push_back(0);
 		return solCol == answerCol;
 	}
 	else
@@ -409,25 +424,28 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 				return false;
 		}
 
-		// 남은 칸 수 세기
-		int remain = 0;
-		for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+		if (solCol.size() <= answerCol.size())
 		{
-			if (solverDrawing->GetValue(i, colIndex) == 0)
-				remain++;
+			// 남은 칸 수 세기
+			int remain = 0;
+			for (int i = 0; i < solverDrawing->GetRowCount(); i++)
+			{
+				if (solverDrawing->GetValue(i, colIndex) == 0)
+					remain++;
+			}
+
+			// sol의 남은 칸 수가 answer를 채우기 위한 칸 수보다 적으면 false 반환
+			int totalRemain = 0;
+			for (int i = solCol.size(); i < answerCol.size(); i++)
+				totalRemain += answerCol[i];
+
+			totalRemain += (answerCol.size() - solCol.size() - 1);
+
+			if (remain < totalRemain)
+				return false;
+
+			return true;
 		}
-
-		// sol의 남은 칸 수가 answer를 채우기 위한 칸 수보다 적으면 false 반환
-		int totalRemain = 0;
-		for (int i = solCol.size(); i < answerCol.size(); i++)
-			totalRemain += answerCol[i];
-
-		totalRemain += (answerCol.size() - solCol.size() - 1);
-
-		if (remain < totalRemain)
-			return false;
-
-		return true;
 	}
 }
 
