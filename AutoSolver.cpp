@@ -24,6 +24,7 @@ void AutoSolver::Solution(PlayScene* playScene, Drawing* drawing)
 		delete solver;
 	solverDrawingList.clear();
 
+	// GetHint에서 전달받은 그림이 정답과 다른 부분이 있으면 제대로된 Solution을 줄 수 없으므로 초기화
 	Drawing* solverDrawing = new Drawing(*playScene->GetPlayerDrawing());
 	for (int i = 0; i < solverDrawing->GetRowCount(); i++)
 	{
@@ -148,7 +149,7 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 			Drawing* sol = new Drawing(*solverDrawing);
 			solverDrawingList.push_back(sol);
 		}
-		
+
 		return;
 	}
 
@@ -160,7 +161,8 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 	// 현재 위치의 값이 0이 아니면 다음 검사로 넘어감
 	if (solverDrawing->GetValue(rowIndex, colIndex) != 0)
 	{
-		//GameManager::GetGM()->boardViewer.Render(solverDrawing);
+		GameManager::GetGM()->boardViewer.Render(solverDrawing);
+		//system("pause");
 		FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		return;
 	}
@@ -174,12 +176,14 @@ void AutoSolver::FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int r
 		// 완성이 아직 안되어도 힌트에 어긋난 건 아니므로, completeCheck값을 false로 넘김
 		if (CheckRow(solverDrawing, drawing, rowIndex, false) && CheckCol(solverDrawing, drawing, colIndex, false))
 		{
-			//GameManager::GetGM()->boardViewer.Render(solverDrawing);
+			GameManager::GetGM()->boardViewer.Render(solverDrawing);
+			//system("pause");
 			FindSolutionDFS(solverDrawing, drawing, nextRowIndex, nextColIndex);
 		}
 
 		// 재귀 조건에 들어가지 않으면, 이전 상태로 되돌림
-		//GameManager::GetGM()->boardViewer.Render(solverDrawing);
+		GameManager::GetGM()->boardViewer.Render(solverDrawing);
+		//system("pause");
 		solverDrawing->SetValue(rowIndex, colIndex, 0);
 	}
 }
@@ -376,6 +380,42 @@ bool AutoSolver::CheckRow(Drawing* solverDrawing, Drawing* drawing, int rowIndex
 
 			return true;
 		}
+
+		// 논리적 추론을 먼저 거쳤다는 가정하에 짜봄 (예외처리 다 안됨)
+		/*for (int i = 0; i < solRow.size(); i++)
+		{
+			if (i >= answerRow.size())
+				break;
+			if (i == solRow.size() - 1)
+				break;
+			if (solRow[i] > answerRow[i])
+				return false;
+		}
+
+		if (!solRow.empty() && solRow.size() <= answerRow.size())
+		{
+			if (solRow[solRow.size() - 1] > answerRow[solRow.size() - 1])
+				return false;
+		}
+
+		int remain = 0;
+		for (int i = 0; i < solverDrawing->GetColCount(); i++)
+		{
+			if (solverDrawing->GetValue(i, rowIndex) == 0)
+				remain++;
+		}
+
+		int totalNeed = 0;
+		for (int i = solRow.size(); i < answerRow.size(); i++)
+			totalNeed += answerRow[i];
+
+		if (solRow.size() < answerRow.size())
+			totalNeed += (answerRow.size() - solRow.size() - 1);
+
+		if (remain < totalNeed)
+			return false;
+
+		return true;*/
 	}
 }
 
@@ -447,6 +487,42 @@ bool AutoSolver::CheckCol(Drawing* solverDrawing, Drawing* drawing, int colIndex
 
 			return true;
 		}
+
+		// 논리적 추론을 먼저 거쳤다는 가정하에 짜봄 (예외처리 다 안됨)
+		/*for (int i = 0; i < solCol.size(); i++) 
+		{
+			if (i >= answerCol.size())
+				break;
+			if (i == solCol.size() - 1)
+				break;
+			if (solCol[i] > answerCol[i])
+				return false;
+		}
+
+		if (!solCol.empty() && solCol.size() <= answerCol.size()) 
+		{
+			if (solCol[solCol.size() - 1] > answerCol[solCol.size() - 1])
+				return false;
+		}
+
+		int remain = 0;
+		for (int i = 0; i < solverDrawing->GetRowCount(); i++) 
+		{
+			if (solverDrawing->GetValue(i, colIndex) == 0)
+				remain++;
+		}
+
+		int totalNeed = 0;
+		for (int i = solCol.size(); i < answerCol.size(); i++)
+			totalNeed += answerCol[i];
+
+		if (solCol.size() < answerCol.size())
+			totalNeed += (answerCol.size() - solCol.size() - 1);
+
+		if (remain < totalNeed)
+			return false;
+
+		return true;*/
 	}
 }
 

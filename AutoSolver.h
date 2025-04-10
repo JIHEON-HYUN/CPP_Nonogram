@@ -20,6 +20,8 @@ public:
 	// 노노그램은 반드시 해답이 한 개로 보장되지 않음 => 해답들을 vector에 push하여 반환
 	void Solution(PlayScene* playScene, Drawing* drawing);
 	void FindSolutionDFS(Drawing* solverDrawing, Drawing* drawing, int rowIndex, int colIndex);
+
+	// 좌, 우에 몰리게 해답을 찾고 겹치는 부분을 색칠로 확정 지음
 	vector<pair<int, int>> LeftSolve(vector<int> line, int length);
 	vector<pair<int, int>> RightSolve(vector<int> line, int length);
 	void OverlapSolve(Drawing* solverDrawing, Drawing* drawing);
